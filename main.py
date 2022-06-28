@@ -29,9 +29,15 @@ async def send_type(message: types.Message):
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
+# @dp.message_handler(Text(equals='Отправить фото'))
+# async def get_photo(message: types.Message):
+#     await message.reply('')
+
+
 async def scheduled(wait_for):
     while True:
         await asyncio.sleep(wait_for)
+
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
