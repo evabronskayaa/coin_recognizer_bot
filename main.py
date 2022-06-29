@@ -16,17 +16,20 @@ dp = Dispatcher(bot)
 figures = [Circle(), Rectangle(), Triangle()]
 
 
+# handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
     await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
 
 
+# handler оf /help command
 @dp.message_handler(commands=['help'])
 async def send_help(message: types.Message):
     message_text = f'Ты можешь управлять мною, используя эти команды\n'
     await message.answer(text=message_text)
 
 
+# handler оf /menu command
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -37,6 +40,7 @@ async def send_type(message: types.Message):
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
+# handler оf other text
 @dp.message_handler()
 async def send_echo(message: types.Message):
     text = message.text
