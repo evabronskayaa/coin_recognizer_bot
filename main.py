@@ -1,7 +1,7 @@
 import logging
 import asyncio
 
-from aiogram import Bot,  utils, types
+from aiogram import Bot, utils, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
@@ -11,7 +11,8 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-figures = ['Квадраты', 'Круги','Прямоугольники','Треугольники']
+figures = ['Квадраты', 'Круги', 'Прямоугольники', 'Треугольники']
+
 
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
@@ -26,10 +27,12 @@ async def send_help(message: types.Message):
 
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ['Распознать монеты', 'Избранное', 'История', 'Распознать по слову'] + [f"распознать на фото {figura}" for figura in figures]
+    keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    buttons = ['Распознать монеты', 'Избранное', 'История', 'Распознать по слову'] + \
+              [f"распознать на фото {figura}" for figura in figures]
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
+
 
 @dp.message_handler()
 async def send_echo(message: types.Message):
@@ -39,6 +42,7 @@ async def send_echo(message: types.Message):
 async def scheduled(wait_for):
     while True:
         await asyncio.sleep(wait_for)
+
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
