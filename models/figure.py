@@ -1,25 +1,25 @@
 from abc import ABC
 
 
-class Object(ABC):
+class Figure(ABC):
     @property
     def name(self):
         pass
 
 
-class Rectangle(Object):
-    @Object.name.getter
+class Rectangle(Figure):
+    @Figure.name.getter
     def name(self):
         return "прямоугольник"
 
 
-class Circle(Object):
-    @Object.name.getter
+class Circle(Figure):
+    @Figure.name.getter
     def name(self):
         return "круг"
 
 
-class Triangle(Object):
-    @Object.name.getter
+class Triangle(Figure):
+    @Figure.name.getter
     def name(self):
         return "треугольник"

@@ -29,8 +29,9 @@ async def send_help(message: types.Message):
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+
     buttons = ['Распознать валюту', 'Избранное', 'История', 'Распознать по слову'] + \
-              [f"Распознать на фото {figura.name}и" for figura in figures]
+              [f"Распознать на фото {figure.name}и" for figure in figures]
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
