@@ -5,6 +5,7 @@ from aiogram import Bot, utils, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
+from models.command import get_command
 from models.figure import Rectangle, Circle, Triangle
 
 logging.basicConfig(level=logging.INFO)
@@ -39,9 +40,9 @@ async def send_type(message: types.Message):
 @dp.message_handler()
 async def send_echo(message: types.Message):
     text = message.text
+    command = get_command(text, figures)
 
-
-    await message.reply("Моя твоя не понимать")
+    await message.reply(command.message())
 
 
 async def scheduled(wait_for):

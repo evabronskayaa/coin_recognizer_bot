@@ -10,16 +10,16 @@ class Figure(ABC):
 class Rectangle(Figure):
     @Figure.name.getter
     def name(self):
-        return "прямоугольник"
+        return 'прямоугольник'
 
 
 class Circle(Figure):
     @Figure.name.getter
     def name(self):
-        return "круг"
+        return 'круг'
 
 
 class Triangle(Figure):
     @Figure.name.getter
     def name(self):
-        return "треугольник"
+        return 'треугольник'

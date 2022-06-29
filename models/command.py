@@ -9,14 +9,14 @@ def get_command(text, shapes):
         last_word = text.split(' ')[-1]
         for shape in shapes:
             if shape.name in last_word:
-                ShapeSearch(shape)
+                return ShapeSearch(shape)
         if last_word == 'валюту':
-            MoneySearch()
+            return MoneySearch()
         elif last_word == 'слову':
-            OtherSearch(last_word)
-        NothingCommand()
+            return OtherSearch(last_word)
+        return NothingCommand()
     else:
-        NothingCommand()
+        return NothingCommand()
 
 
 class Command(ABC):
@@ -26,7 +26,7 @@ class Command(ABC):
 
     @property
     def message(self):
-        ''
+        return ''
 
 
 # command for search shapes
@@ -41,7 +41,7 @@ class ShapeSearch(Command):
         # todo search shape
 
     def message(self):
-        f'ждем фотографию с {self.figure.name}ами'
+        return f'ждем фотографию с {self.figure.name}ами'
 
 
 # command that does nothing
@@ -50,16 +50,17 @@ class NothingCommand(Command):
         pass
 
     def message(self):
-        'Моя твоя не понимать'
+        return 'Моя твоя не понимать'
 
 
 # command for search money
 class MoneySearch(Command):
     def execute(self):
         pass
+        # todo search money
 
     def message(self):
-        'ждем фотографию с деньгами'
+        return 'ждем фотографию с деньгами'
 
 
 # command for search other objects
@@ -71,7 +72,7 @@ class OtherSearch(Command):
 
     def execute(self):
         pass
-        # todo search shape
+        # todo search object
 
     def message(self):
-        f'ждем фотографию с {self.text}'
+        return f'ждем фотографию с {self.text}'
