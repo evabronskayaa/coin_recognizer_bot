@@ -33,6 +33,7 @@ async def scheduled(wait_for):
     while True:
         await asyncio.sleep(wait_for)
 
+
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled(10))
