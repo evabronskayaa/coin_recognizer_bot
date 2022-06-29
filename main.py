@@ -1,7 +1,9 @@
 import logging
 import asyncio
 
-from aiogram import Bot, Dispatcher, executor, utils, types
+from aiogram import Bot,  utils, types
+from aiogram.dispatcher import Dispatcher
+from aiogram.utils import executor
 from data.config import TOKEN
 
 logging.basicConfig(level=logging.INFO)
@@ -29,6 +31,11 @@ async def send_type(message: types.Message):
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
+@dp.message_handler()
+async def send_echo(message: types.Message):
+    await message.reply("Моя твоя не понимать")
+
+
 async def scheduled(wait_for):
     while True:
         await asyncio.sleep(wait_for)
@@ -37,5 +44,3 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled(10))
     executor.start_polling(dp, skip_updates=True)
-
-
