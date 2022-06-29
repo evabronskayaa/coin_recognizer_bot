@@ -32,10 +32,10 @@ async def send_help(message: types.Message):
 # handler оf /menu command
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-    buttons = ['Распознать валюту', 'Избранное', 'История', 'Распознать по слову'] + \
-              [f"Распознать на фото {figure.name}и" for figure in figures]
+    buttons = ['Загрузить фото', 'Избранное', 'История']  # , 'Распознать по слову'] + \
+    # [f"Распознать на фото {figure.name}и" for figure in figures]
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 

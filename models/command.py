@@ -10,11 +10,11 @@ def get_command(text, shapes):
         for shape in shapes:
             if shape.name in last_word:
                 return ShapeSearch(shape)
-        if last_word == 'валюту':
-            return MoneySearch()
-        elif last_word == 'слову':
+        if last_word == 'слову':
             return OtherSearch(last_word)
         return NothingCommand()
+    elif 'загрузить фото' in text.lower():
+        return MoneySearch()
     else:
         return NothingCommand()
 
@@ -60,7 +60,7 @@ class MoneySearch(Command):
         # todo search money
 
     def message(self):
-        return 'ждем фотографию с деньгами'
+        return 'отправляй фотографию'
 
 
 # command for search other objects
