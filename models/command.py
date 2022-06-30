@@ -1,30 +1,25 @@
 from abc import ABC, abstractmethod
 import datetime
 from models.figure import Circle
+from models.figure import figures
 
 
 # get command for text
 def get_command(text, shapes):
     date = datetime.date.today()
-    if 'распознать' in text.lower():
-        last_word = text.split(' ')[-1]
-        for shape in shapes:
-            if shape.name in last_word:
-                return ShapeSearch(shape, date)
-        if last_word == 'слову':
-            return OtherSearch(last_word, date)
-        return NothingCommand(date)
-    elif 'загрузить фото' in text.lower():
-        return MoneySearch(date)
-    else:
-        return NothingCommand(date)
+    commands = [FollowCommand(date), HistoryCommand(date), OtherSearch(text, date), MoneySearch(date)] + \
+               [ShapeSearch(figure, date) for figure in figures]
+    for command in commands:
+        if text.lower() in command.key_word.lower():
+            return command
+    return NothingCommand(date)
 
 
 class Command(ABC):
-    data = datetime.date(2012, 12, 14)
+    date = datetime.date(2012, 12, 14)
 
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, date):
+        self.date = date
 
     @abstractmethod
     def execute(self):
@@ -41,10 +36,10 @@ class Command(ABC):
 
 # command for search shapes
 class ShapeSearch(Command):
-    figure = Circle()
+    __figure = Circle()
 
-    def __init__(self, figure, data):
-        super().__init__(data)
+    def __init__(self, figure, date):
+        super().__init__(date)
         self.figure = figure
 
     def execute(self):
@@ -53,7 +48,11 @@ class ShapeSearch(Command):
 
     @Command.message.getter
     def message(self):
-        return f'ждем фотографию с {self.figure.name}ами'
+        return f'ждем фотографию с {self.__figure.name}ами'
+
+    @Command.message.getter
+    def key_word(self):
+        return f"распознать на фото {self.__figure.name.lower()}и"
 
 
 # command that does nothing
@@ -64,6 +63,10 @@ class NothingCommand(Command):
     @Command.message.getter
     def message(self):
         return 'Моя твоя не понимать'
+
+    @Command.message.getter
+    def key_word(self):
+        return ""
 
 
 # command for search money
@@ -76,13 +79,17 @@ class MoneySearch(Command):
     def message(self):
         return 'отправляй фотографию'
 
+    @Command.message.getter
+    def key_word(self):
+        return f"загрузить фото"
+
 
 # command for search other objects
 class OtherSearch(Command):
     text = ''
 
-    def __init__(self, text, data):
-        super().__init__(data)
+    def __init__(self, text, date):
+        super().__init__(date)
         self.text = text
 
     def execute(self):
@@ -93,10 +100,14 @@ class OtherSearch(Command):
     def message(self):
         return f'ждем фотографию с {self.text}'
 
+    @Command.message.getter
+    def key_word(self):
+        return "распознать по слову"
+
 
 # command for get follow images
 class FollowCommand(Command):
-    message = ''
+    __text = 'FollowCommand'
 
     def execute(self):
         pass
@@ -104,12 +115,15 @@ class FollowCommand(Command):
 
     @Command.message.getter
     def message(self):
-        return self.message
+        return self.__text
+
+    @Command.message.getter
+    def key_word(self):
+        return "избранное"
 
 
 # command for get history of command
 class HistoryCommand(Command):
-    commands = []
 
     def execute(self):
         pass
@@ -118,6 +132,10 @@ class HistoryCommand(Command):
     @Command.message.getter
     def message(self):
         message = ''
-        for command in self.commands:
-            message += f'команда {command.message}\n дата: {command.data}\n'
-        return self.message
+        for command in [ShapeSearch(Circle(), datetime.date.today())]:
+            message += f"команда {command.message}\n дата: {command.date}\n"
+        return message
+
+    @Command.message.getter
+    def key_word(self):
+        return "история"

@@ -6,14 +6,14 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from models.command import get_command
-from models.figure import Rectangle, Circle, Triangle
+from models.figure import figures
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-figures = [Circle(), Rectangle(), Triangle()]
+
 
 
 # handler оf /start command
