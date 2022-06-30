@@ -46,7 +46,7 @@ async def send_echo(message: types.Message):
     text = message.text
     command = get_command(text, figures)
 
-    await message.reply(command.message())
+    await message.reply(command.message)
 
 
 async def scheduled(wait_for):
