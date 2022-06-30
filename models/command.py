@@ -21,14 +21,17 @@ class Command(ABC):
     def __init__(self, date):
         self.date = date
 
+    # выполнение команды
     @abstractmethod
     def execute(self):
         pass
 
+    # сообщение которое выведет команда с началом работы
     @property
     def message(self):
         pass
 
+    # ключевое слово по которому мы поймем что нужно выполнить данную команду
     @property
     def key_word(self):
         pass
