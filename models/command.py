@@ -5,10 +5,9 @@ from models.figure import figures
 
 
 # get command for text
-def get_command(text, shapes):
+def get_command(text):
     date = datetime.date.today()
-    commands = [FollowCommand(date), HistoryCommand(date), OtherSearch(text, date), MoneySearch(date)] + \
-               [ShapeSearch(figure, date) for figure in figures]
+
     for command in commands:
         if text.lower() in command.key_word.lower():
             return command
@@ -89,11 +88,7 @@ class MoneySearch(Command):
 
 # command for search other objects
 class OtherSearch(Command):
-    text = ''
-
-    def __init__(self, text, date):
-        super().__init__(date)
-        self.text = text
+    __text = ''
 
     def execute(self):
         pass
@@ -101,11 +96,15 @@ class OtherSearch(Command):
 
     @Command.message.getter
     def message(self):
-        return f'ждем фотографию с {self.text}'
+        return f'ждем фотографию'
 
     @Command.message.getter
     def key_word(self):
         return "распознать по слову"
+
+    # записываем то что будем искать на картинке
+    def set_word(self, word):
+        self.__text = word
 
 
 # command for get follow images
@@ -142,3 +141,8 @@ class HistoryCommand(Command):
     @Command.message.getter
     def key_word(self):
         return "история"
+
+
+__date = datetime.date.today()
+commands = [FollowCommand(__date), HistoryCommand(__date), OtherSearch(__date), MoneySearch(__date)] + \
+           [ShapeSearch(figure, __date) for figure in figures]

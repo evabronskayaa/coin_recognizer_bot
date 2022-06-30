@@ -6,14 +6,11 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from models.command import get_command
-from models.figure import figures
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-
-
 
 
 # handler оf /start command
@@ -40,12 +37,11 @@ async def send_type(message: types.Message):
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
-# handler оf other text
+# handler оf others command
 @dp.message_handler()
 async def send_echo(message: types.Message):
     text = message.text
-    command = get_command(text, figures)
-
+    command = get_command(text)
     await message.reply(command.message)
 
 
