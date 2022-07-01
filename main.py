@@ -1,19 +1,16 @@
 import logging
 import asyncio
 
-from aiogram import Bot, utils, types
+from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
-from models.command import get_command
-from models.figure import Rectangle, Circle, Triangle
+from utils.models.command import get_command
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-
-figures = [Circle(), Rectangle(), Triangle()]
 
 
 # handler оf /start command
@@ -33,20 +30,19 @@ async def send_help(message: types.Message):
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
     buttons = ['Загрузить фото', 'Избранное', 'История']  # , 'Распознать по слову'] + \
     # [f"Распознать на фото {figure.name}и" for figure in figures]
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
-# handler оf other text
+# handler оf others command
 @dp.message_handler()
 async def send_echo(message: types.Message):
+    keyboard = types.ReplyKeyboardRemove()
     text = message.text
-    command = get_command(text, figures)
-
-    await message.reply(command.message())
+    command = get_command(text)
+    await message.reply(command.message, reply_markup= keyboard)
 
 
 async def scheduled(wait_for):

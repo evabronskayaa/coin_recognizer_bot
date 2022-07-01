@@ -23,3 +23,6 @@ class Triangle(Figure):
     @Figure.name.getter
     def name(self):
         return 'треугольник'
+
+
+figures = [Circle(), Rectangle(), Triangle()]
