@@ -30,7 +30,6 @@ async def send_help(message: types.Message):
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-
     buttons = ['Загрузить фото', 'Избранное', 'История']  # , 'Распознать по слову'] + \
     # [f"Распознать на фото {figure.name}и" for figure in figures]
     keyboard.add(*buttons)
@@ -40,9 +39,10 @@ async def send_type(message: types.Message):
 # handler оf others command
 @dp.message_handler()
 async def send_echo(message: types.Message):
+    keyboard = types.ReplyKeyboardRemove()
     text = message.text
     command = get_command(text)
-    await message.reply(command.message)
+    await message.reply(command.message, reply_markup= keyboard)
 
 
 async def scheduled(wait_for):
