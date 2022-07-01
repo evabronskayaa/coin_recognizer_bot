@@ -1,6 +1,6 @@
 from peewee import *
-
-db = SqliteDatabase('')
+from data.config import DB_PATH
+db = SqliteDatabase(DB_PATH)
 
 
 class BaseModel(Model):
@@ -8,38 +8,47 @@ class BaseModel(Model):
         database = db
 
 
-class User(Model):
-    name = CharField(null=False)
-    id = IntegerField(unique=True, null=True, help_text="id that use in the Telegram", primary_key=True)
-    start_date = DateTimeField(null=True, help_text="start date of using the bot")
-    cash_account = IntegerField(null=True)
+class User(BaseModel):
+    name = CharField(null=True)
+    id = IntegerField(unique=True, null=False, help_text="id that use in the Telegram", primary_key=True)
+    start_date = DateTimeField(null=False, help_text="start date of using the bot")
+    cash_account = IntegerField(null=False)
 
     class Meta:
         order_by = 'start_date'
-        database = db
+        db_table = 'Users'
 
 
-class Manager(BaseModel):
-    token = CharField(null=True)
-    user_id = ForeignKeyField(User, unique=True, null=True)
+class Worker(BaseModel):
+    user_id = ForeignKeyField(User, unique=True, null=False)
 
 
-class Admin(BaseModel):
-    user_id = ForeignKeyField(User, unique=True, null=True)
+class Manager(Worker):
+    token = CharField(null=False, primary_key=True)
+
+    class Meta:
+        db_table = 'Managers'
 
 
-class Request(Model):
-    user_id = ForeignKeyField(User, unique=True, null=True)
-    date = DateTimeField(null=True)
-    message = CharField(null=False)
-    data = BigBitField(null=True)
-    id = IntegerField(unique=True, null=True, help_text="id of Request", primary_key=True)
+class Admin(Worker):
+
+    class Meta:
+        db_table = 'Admins'
+
+
+class Request(Worker):
+    date = DateTimeField(null=False)
+    message = CharField(null=True)
+    data = BigBitField(null=False)
+    id = IntegerField(unique=True, null=False, help_text="id of Request", primary_key=True)
 
     class Meta:
         order_by = 'date'
-        database = db
+        db_table = 'Requests'
 
 
-class Follow(BaseModel):
-    user_id = ForeignKeyField(User, unique=True, null=True)
-    request_id = ForeignKeyField(Request, unique=True, null=True)
+class Follow(Worker):
+    request_id = ForeignKeyField(Request, unique=True, null=False, primary_key=True)
+
+    class Meta:
+        db_table = 'Follows'
