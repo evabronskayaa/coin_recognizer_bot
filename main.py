@@ -7,6 +7,7 @@ from aiogram.utils import executor
 from data.config import TOKEN
 from utils.models.command import get_command
 from utils.models.user import *
+from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
@@ -17,7 +18,8 @@ user = User()
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-
+    user = get_user_by_id(message.from_user.id)
+    print(user)
     await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
 
 

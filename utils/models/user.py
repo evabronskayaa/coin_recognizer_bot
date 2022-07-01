@@ -13,6 +13,18 @@ class User:
         self.__start_date = date
         self.__cash_account = cash
 
+    def get_id(self):
+        return self.__id
+
+    def get_name(self):
+        return self.__name
+
+    def get_start_date(self):
+        return self.__start_date
+
+    def get_cash(self):
+        return self.__cash_account
+
 
 class Manager(User):
     __token = ''
