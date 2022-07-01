@@ -8,7 +8,7 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):
+class UserDbModel(BaseModel):
     name = CharField(null=True)
     id = IntegerField(unique=True, null=False, help_text="id that use in the Telegram", primary_key=True)
     start_date = DateTimeField(null=False, help_text="start date of using the bot")
@@ -20,23 +20,23 @@ class User(BaseModel):
 
 
 class Worker(BaseModel):
-    user_id = ForeignKeyField(User, unique=True, null=False)
+    user_id = ForeignKeyField(UserDbModel, unique=True, null=False)
 
 
-class Manager(Worker):
+class ManagerDbModel(Worker):
     token = CharField(null=False, primary_key=True)
 
     class Meta:
         db_table = 'Managers'
 
 
-class Admin(Worker):
+class AdminDbModel(Worker):
 
     class Meta:
         db_table = 'Admins'
 
 
-class Request(Worker):
+class RequestDbModel(Worker):
     date = DateTimeField(null=False)
     message = CharField(null=True)
     data = BigBitField(null=False)
@@ -47,8 +47,8 @@ class Request(Worker):
         db_table = 'Requests'
 
 
-class Follow(Worker):
-    request_id = ForeignKeyField(Request, unique=True, null=False, primary_key=True)
+class FollowDbModel(Worker):
+    request_id = ForeignKeyField(RequestDbModel, unique=True, null=False, primary_key=True)
 
     class Meta:
         db_table = 'Follows'
