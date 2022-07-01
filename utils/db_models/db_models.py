@@ -8,11 +8,15 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):
+class User(Model):
     name = CharField(null=False)
     id = IntegerField(unique=True, null=True, help_text="id that use in the Telegram", primary_key=True)
-    start_date = DateTimeField(null=True)
+    start_date = DateTimeField(null=True, help_text="start date of using the bot")
     cash_account = IntegerField(null=True)
+
+    class Meta:
+        order_by = 'start_date'
+        database = db
 
 
 class Manager(BaseModel):
@@ -24,12 +28,16 @@ class Admin(BaseModel):
     user_id = ForeignKeyField(User, unique=True, null=True)
 
 
-class Request(BaseModel):
+class Request(Model):
     user_id = ForeignKeyField(User, unique=True, null=True)
     date = DateTimeField(null=True)
     message = CharField(null=False)
     data = BigBitField(null=True)
     id = IntegerField(unique=True, null=True, help_text="id of Request", primary_key=True)
+
+    class Meta:
+        order_by = 'date'
+        database = db
 
 
 class Follow(BaseModel):
