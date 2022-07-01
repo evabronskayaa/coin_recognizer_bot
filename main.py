@@ -12,7 +12,6 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
-
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
@@ -34,6 +33,10 @@ async def send_type(message: types.Message):
     # [f"Распознать на фото {figure.name}и" for figure in figures]
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
+
+@dp.message_handler(commands=[admin])
+async def send_admin(message: types.Message):
+    d
 
 
 # handler оf others command
