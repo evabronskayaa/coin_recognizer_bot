@@ -1,11 +1,11 @@
 import logging
 import asyncio
 
-from aiogram import Bot, utils, types
+from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
-from models.command import get_command
+from utils.models.command import get_command
 
 logging.basicConfig(level=logging.INFO)
 

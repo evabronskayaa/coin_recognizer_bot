@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import datetime
-from models.figure import Circle
-from models.figure import figures
+from utils.models.figure import Circle
+from utils.models.figure import figures
 
 
 # get command for text
@@ -135,7 +135,7 @@ class HistoryCommand(Command):
     def message(self):
         message = ''
         for command in [ShapeSearch(Circle(), datetime.date.today())]:
-            message += f"команда {command.message}\n дата: {command.date}\n"
+            message += f"команда {command.key_word}\n дата: {command.date}\n"
         return message
 
     @Command.message.getter
