@@ -9,32 +9,29 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
-    name = TextField()
-    user_id = CharField()
+    name = CharField()
+    id = PrimaryKeyField(unique=True)
+    start_date = DateTimeField()
+    cash_account = IntegerField()
 
 
 class Manager(BaseModel):
-    name = TextField()
-    user_id = CharField()
+    token = CharField()
+    user_id = ForeignKeyField(User, unique=True)
 
 
 class Admin(BaseModel):
-    name = TextField()
-    user_id = CharField()
+    user_id = ForeignKeyField(User, unique=True)
 
 
-class Image(BaseModel):
-    url = TextField()
-    user_id = CharField()
-    image_type = TextField()
-    # + archive
+class Request(BaseModel):
+    user_id = ForeignKeyField(User, unique=True)
+    date = DateTimeField()
+    message = TextField()
+    data = BigBitField()
+    id = PrimaryKeyField(unique=True)
 
 
-class Favorites(BaseModel):
-    url = TextField()
-    user_id = CharField()
-
-
-class History(BaseModel):
-    url = TextField()
-    user_id = CharField()
+class Follow(BaseModel):
+    user_id = ForeignKeyField(User, unique=True)
+    request_id = ForeignKeyField(Request, unique=True)
