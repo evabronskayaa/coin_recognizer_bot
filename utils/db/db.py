@@ -1,4 +1,4 @@
-from utils.db_models.db_models import *
+from utils.db_models.models import *
 
 
 def init_db():

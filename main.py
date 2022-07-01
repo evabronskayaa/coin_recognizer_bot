@@ -6,15 +6,18 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from utils.models.command import get_command
-
+from utils.models.user import *
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
+user = User()
+
 
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
+
     await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
 
 
@@ -34,9 +37,11 @@ async def send_type(message: types.Message):
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
-@dp.message_handler(commands=[admin])
+
+# handler of /admin command
+@dp.message_handler(commands=['admin'])
 async def send_admin(message: types.Message):
-    d
+    2
 
 
 # handler оf others command

@@ -7,7 +7,7 @@ class User:
     __start_date = datetime.date.today()
     __cash_account = 0
 
-    def __init__(self, name, t_id, date, cash):
+    def __init__(self, name='', t_id=0, date=datetime.date.today(), cash=0):
         self.name = name
         self.id = t_id
         self.__start_date = date
@@ -24,5 +24,5 @@ class Manager(User):
 
 class Admin(User):
 
-    def __init__(self, name, t_id, date, cash, token):
+    def __init__(self, name, t_id, date, cash):
         super().__init__(name, t_id, date, cash)
