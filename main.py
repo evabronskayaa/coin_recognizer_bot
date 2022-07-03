@@ -30,9 +30,9 @@ async def send_welcome(message: types.Message):
     except:
         t_id = message.from_user.id
         name = message.from_user.first_name
-        cash = 100
+        money = 100
         date = datetime.date.today()
-        user = User(t_id=t_id, name=name, date=date, cash=cash)
+        user = User(t_id=t_id, name=name, date=date, money=money)
         add_user(user)
         text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
     await message.answer(text)
@@ -67,7 +67,7 @@ async def send_echo(message: types.Message):
     keyboard = types.ReplyKeyboardRemove()
     text = message.text
     command = get_command(text)
-    await message.reply(command.message, reply_markup= keyboard)
+    await message.reply(command.message, reply_markup=keyboard)
 
 
 async def scheduled(wait_for):
