@@ -25,15 +25,14 @@ def check_on_admin(user: User):
 
 
 # function for get admin user
-def get_admin(t_id):
+def get_admin_by_id(t_id):
     admin = AdminDbModel.get(user_id=t_id)
-    print(admin)
     user = get_user_by_id(admin.user_id)
     return Admin(user=user)
 
 
 # function for get admin user
-def get_admin(user):
+def get_admin_by_user(user):
     return Admin(user=user)
 
 
@@ -45,3 +44,15 @@ def check_on_manager(user: User):
         return False
     finally:
         return True
+
+
+# function for get manager rules
+def get_manager_by_id(t_id):
+    manager = ManagerDbModel.get(user_id=t_id)
+    user = get_user_by_id(manager.user_id)
+    return Manager(user=user, token="")
+
+
+# function for get admin user
+def get_manager_by_user(user):
+    return Manager(user=user, token="")

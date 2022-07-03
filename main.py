@@ -22,8 +22,11 @@ async def send_welcome(message: types.Message):
     try:
         user = get_user_by_id(message.from_user.id)
         if check_on_admin(user):
-            user = get_admin(user)
+            user = get_admin_by_user(user)
             text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
+        elif check_on_manager(user):
+            user = get_manager_by_user(user)
+            text = f'Привет, {user.get_name()}. Вы вошли в систему как менеджер'
         else:
             text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
 
