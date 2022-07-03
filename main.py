@@ -1,25 +1,24 @@
-import datetime
 import logging
 import asyncio
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+
+import utils.models.context
 from data.config import TOKEN
 from utils.models.command import get_command
-from utils.models.user import *
 from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-user: User
+context = utils.models.context.Context()
 
 
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    text = "привет"
     try:
         user = get_user_by_id(message.from_user.id)
         if check_on_admin(user):
@@ -27,6 +26,7 @@ async def send_welcome(message: types.Message):
             text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
         else:
             text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+
     except:
         t_id = message.from_user.id
         name = message.from_user.first_name
@@ -35,6 +35,7 @@ async def send_welcome(message: types.Message):
         user = User(t_id=t_id, name=name, date=date, money=money)
         add_user(user)
         text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+    context.set_user(user)
     await message.answer(text)
 
 
