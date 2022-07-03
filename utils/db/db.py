@@ -1,8 +1,11 @@
-from utils.db_models.models import *
+import os
 
+from utils.db_models.models import *
+from pathlib import *
 
 def init_db():
     db.create_tables([UserDbModel, ManagerDbModel, AdminDbModel, RequestDbModel, FollowDbModel])
 
 
-init_db()
+print(os.listdir())
+#init_db()

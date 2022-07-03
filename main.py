@@ -19,7 +19,7 @@ user = User()
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
     user = get_user_by_id(message.from_user.id)
-    print(user)
+    print(user.get_name())
     await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
 
 
@@ -43,7 +43,7 @@ async def send_type(message: types.Message):
 # handler of /admin command
 @dp.message_handler(commands=['admin'])
 async def send_admin(message: types.Message):
-    2
+    await message.answer(f'Ну давай, выбирай')
 
 
 # handler оf others command
