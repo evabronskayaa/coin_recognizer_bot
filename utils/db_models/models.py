@@ -1,6 +1,6 @@
 from peewee import *
-from data.config import DB_PATH
-db = SqliteDatabase(DB_PATH)
+
+db = SqliteDatabase("utils/db/database.db")
 
 
 class BaseModel(Model):
@@ -31,7 +31,6 @@ class ManagerDbModel(Worker):
 
 
 class AdminDbModel(Worker):
-
     class Meta:
         db_table = 'Admins'
 

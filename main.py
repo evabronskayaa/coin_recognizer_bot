@@ -1,3 +1,4 @@
+import datetime
 import logging
 import asyncio
 
@@ -12,15 +13,29 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-user = User()
+user: User
 
 
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    user = get_user_by_id(message.from_user.id)
-    print(user.get_name())
-    await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
+    text = "привет"
+    try:
+        user = get_user_by_id(message.from_user.id)
+        if check_on_admin(user):
+            user = get_admin(user)
+            text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
+        else:
+            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+    except:
+        t_id = message.from_user.id
+        name = message.from_user.first_name
+        cash = 100
+        date = datetime.date.today()
+        user = User(t_id=t_id, name=name, date=date, cash=cash)
+        add_user(user)
+        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+    await message.answer(text)
 
 
 # handler оf /help command

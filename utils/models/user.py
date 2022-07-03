@@ -8,8 +8,8 @@ class User:
     __cash_account = 0
 
     def __init__(self, name='', t_id=0, date=datetime.date.today(), cash=0):
-        self.name = name
-        self.id = t_id
+        self.__name = name
+        self.__id = t_id
         self.__start_date = date
         self.__cash_account = cash
 
@@ -36,5 +36,5 @@ class Manager(User):
 
 class Admin(User):
 
-    def __init__(self, name, t_id, date, cash):
-        super().__init__(name, t_id, date, cash)
+    def __init__(self, user):
+        super().__init__(user.get_name(), user.get_id(), user.get_start_date(), user.get_cash())
