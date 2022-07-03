@@ -4,18 +4,42 @@ import asyncio
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+
+import utils.models.context
 from data.config import TOKEN
 from utils.models.command import get_command
-
+from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
+context = utils.models.context.Context()
+
 
 # handler оf /start command
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
-    await message.answer(f'Привет, {message.from_user.first_name}. Я бот, который умеет распозновать монетки на фото')
+    try:
+        user = get_user_by_id(message.from_user.id)
+        if check_on_admin(user):
+            user = get_admin_by_user(user)
+            text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
+        elif check_on_manager(user):
+            user = get_manager_by_user(user)
+            text = f'Привет, {user.get_name()}. Вы вошли в систему как менеджер'
+        else:
+            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+
+    except:
+        t_id = message.from_user.id
+        name = message.from_user.first_name
+        money = 100
+        date = datetime.date.today()
+        user = User(t_id=t_id, name=name, date=date, money=money)
+        add_user(user)
+        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+    context.set_user(user)
+    await message.answer(text)
 
 
 # handler оf /help command
@@ -34,9 +58,11 @@ async def send_type(message: types.Message):
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
-@dp.message_handler(commands=[admin])
+
+# handler of /admin command
+@dp.message_handler(commands=['admin'])
 async def send_admin(message: types.Message):
-    d
+    await message.answer(f'Ну давай, выбирай')
 
 
 # handler оf others command
@@ -45,7 +71,7 @@ async def send_echo(message: types.Message):
     keyboard = types.ReplyKeyboardRemove()
     text = message.text
     command = get_command(text)
-    await message.reply(command.message, reply_markup= keyboard)
+    await message.reply(command.message, reply_markup=keyboard)
 
 
 async def scheduled(wait_for):

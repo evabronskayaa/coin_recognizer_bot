@@ -145,4 +145,4 @@ class HistoryCommand(Command):
 
 __date = datetime.date.today()
 commands = [FollowCommand(__date), HistoryCommand(__date), OtherSearch(__date), MoneySearch(__date)] + \
-           [ShapeSearch(figure, __date) for figure in figures]
+                    [ShapeSearch(figure, __date) for figure in figures]
