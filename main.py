@@ -59,10 +59,16 @@ async def send_type(message: types.Message):
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
-# handler of /admin command
-@dp.message_handler(commands=['admin'])
-async def send_admin(message: types.Message):
-    await message.answer(f'Ну давай, выбирай')
+# handler of /grant command
+@dp.message_handler(commands=['grant'])
+async def send_grant(message: types.Message):
+    user = context.get_user()
+    if isinstance(user, Admin):
+        text = "можите выдать права"
+
+    else:
+        text = "моя твоя не понимать"
+    await message.answer(text)
 
 
 # handler оf others command

@@ -144,5 +144,5 @@ class HistoryCommand(Command):
 
 
 __date = datetime.date.today()
-commands = [FollowCommand(__date), HistoryCommand(__date), OtherSearch(__date), MoneySearch(__date)] + \
+commands: list[Command] = [FollowCommand(__date), HistoryCommand(__date), OtherSearch(__date), MoneySearch(__date)] + \
                     [ShapeSearch(figure, __date) for figure in figures]
