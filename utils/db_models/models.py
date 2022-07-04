@@ -38,7 +38,7 @@ class AdminDbModel(Worker):
 class RequestDbModel(Worker):
     date = DateTimeField(null=False)
     message = CharField(null=True)
-    data = BigBitField(null=False)
+    data = BigBitField(null=True)
     id = IntegerField(unique=True, null=False, help_text="id of Request", primary_key=True)
 
     class Meta:

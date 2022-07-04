@@ -16,4 +16,5 @@ class Request:
         self.__message = message
         self.__date = date
         self.__user = user
-        self.__image = Image.open(io.BytesIO(image_bytes))
+        if image_bytes is not None:
+            self.__image = Image.open(io.BytesIO(image_bytes))
