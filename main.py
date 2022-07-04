@@ -53,7 +53,7 @@ async def send_help(message: types.Message):
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ['Загрузить фото', 'Избранное', 'История']
+    buttons = ['Загрузить фото', 'Избранное', 'История', 'Баланс']
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
@@ -65,7 +65,7 @@ async def send_boost(message: types.Message):
     if isinstance(user, Admin):
         text = "можите выдать права"
     else:
-        text = NothingCommand(date=datetime.date.today()).message
+        text = NothingCommand(context=context).message
     await message.answer(text)
 
 
@@ -74,7 +74,8 @@ async def send_boost(message: types.Message):
 async def send_echo(message: types.Message):
     keyboard = types.ReplyKeyboardRemove()
     text = message.text
-    command = get_command(text)
+    command = get_command(text, context)
+    command.execute()
     await message.reply(command.message, reply_markup=keyboard)
 
 
