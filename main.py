@@ -1,4 +1,3 @@
-import datetime
 import logging
 import asyncio
 
@@ -54,15 +53,14 @@ async def send_help(message: types.Message):
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ['Загрузить фото', 'Избранное', 'История']  # , 'Распознать по слову'] + \
-    # [f"Распознать на фото {figure.name}и" for figure in figures]
+    buttons = ['Загрузить фото', 'Избранное', 'История']
     keyboard.add(*buttons)
     await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
 
 
 # handler of /boost command
 @dp.message_handler(commands=['boost'])
-async def send_grant(message: types.Message):
+async def send_boost(message: types.Message):
     user = context.get_user()
     if isinstance(user, Admin):
         text = "можите выдать права"
@@ -89,3 +87,6 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled(10))
     executor.start_polling(dp, skip_updates=True)
+
+  # , 'Распознать по слову'] + \
+    # [f"Распознать на фото {figure.name}и" for figure in figures]
