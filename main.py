@@ -1,3 +1,4 @@
+import datetime
 import logging
 import asyncio
 
@@ -7,7 +8,7 @@ from aiogram.utils import executor
 
 import utils.models.context
 from data.config import TOKEN
-from utils.models.command import get_command
+from utils.models.command import get_command, NothingCommand
 from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
 
@@ -66,7 +67,7 @@ async def send_grant(message: types.Message):
     if isinstance(user, Admin):
         text = "можите выдать права"
     else:
-        text = "моя твоя не понимать"
+        text = NothingCommand(date=datetime.date.today()).message
     await message.answer(text)
 
 
