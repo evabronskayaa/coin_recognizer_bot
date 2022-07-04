@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import datetime
 
+from utils.db_functions.requset_functions import get_request
 from utils.models.context import Context
 from utils.models.figure import Circle
 from utils.models.figure import figures
@@ -97,7 +98,7 @@ class MoneySearch(Command):
 
 # command for search other objects
 class OtherSearch(Command):
-    __text = ''
+    _text = ''
 
     def execute(self):
         pass
@@ -113,12 +114,11 @@ class OtherSearch(Command):
 
     # записываем то что будем искать на картинке
     def set_word(self, word):
-        self.__text = word
+        self._text = word
 
 
 # command for get follow images
 class FollowCommand(Command):
-    __text = 'FollowCommand'
 
     def execute(self):
         pass
@@ -126,7 +126,7 @@ class FollowCommand(Command):
 
     @Command.message.getter
     def message(self):
-        return self.__text
+        return 'FollowCommand'
 
     @Command.key_word.getter
     def key_word(self):
@@ -135,15 +135,19 @@ class FollowCommand(Command):
 
 # command for get history of command
 class HistoryCommand(Command):
+    _message: str
 
     def execute(self):
-        pass
-        # todo print history
+        user = self._context.get_user()
+        try:
+            for request in get_request(user):
+                self._message += request.to_string() + "\n"
+        except:
+            self._message = "вы еще не делали запросы"
 
     @Command.message.getter
     def message(self):
-        message = self._context.get_user().get_name()
-        return message
+        return self._message
 
     @Command.key_word.getter
     def key_word(self):
