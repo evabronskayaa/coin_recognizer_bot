@@ -8,7 +8,7 @@ class Context:
 
     def __init__(self):
         self._users: list[User] = []
-        self._last_command = NothingCommand(self)
+        self._last_command = NothingCommand()
 
     def get_user_by_id(self, t_id):
         for user in self._users:
@@ -19,8 +19,6 @@ class Context:
     def add_user(self, user: User):
         if user.get_id() >= 0 | user.get_id() not in [user2.get_id() for user2 in self._users]:
             self._users.append(user)
-        else:
-            raise Exception('incorrect user id')
 
     def get_last_command(self):
         return self._last_command

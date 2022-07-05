@@ -1,12 +1,12 @@
 import logging
 import asyncio
+import utils.models.context
 
-from aiogram import Bot, types
+from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-
-import utils.models.context
 from data.config import TOKEN
+from keyboards.inline.menu import *
 from utils.models.command import get_command, NothingCommand
 from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +30,7 @@ async def send_welcome(message: types.Message):
         else:
             text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
 
-    except Exception as ex:
+    except Exception:
         t_id = message.from_user.id
         name = message.from_user.first_name
         money = 100
@@ -52,10 +52,7 @@ async def send_help(message: types.Message):
 # handler оf /menu command
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ['Загрузить фото', 'Избранное', 'История', 'Баланс']
-    keyboard.add(*buttons)
-    await message.answer(f'Ну давай, выбирай', reply_markup=keyboard)
+    await message.answer(f'Ну давай, выбирай', reply_markup=get_menu_kb())
 
 
 # handler of /boost command
@@ -66,7 +63,7 @@ async def send_boost(message: types.Message):
     if isinstance(user, Admin):
         text = "можите выдать права"
     else:
-        text = NothingCommand(context=context).message
+        text = NothingCommand().message
     await message.answer(text)
 
 
@@ -74,11 +71,10 @@ async def send_boost(message: types.Message):
 @dp.message_handler()
 async def send_echo(message: types.Message):
     t_id = message.from_user.id
-    keyboard = types.ReplyKeyboardRemove()
     text = message.text
-    command = get_command(text, context)
+    command = get_command(text)
     command.execute(context.get_user_by_id(t_id))
-    await message.reply(command.message, reply_markup=keyboard)
+    await message.reply(command.message, reply_markup=get_none_kb())
 
 
 async def scheduled(wait_for):

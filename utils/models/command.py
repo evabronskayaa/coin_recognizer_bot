@@ -1,30 +1,26 @@
 from abc import ABC, abstractmethod
 
 from utils.db_functions.requset_functions import get_request
-from utils.models.context import Context
 from utils.models.figure import Circle
 from utils.models.figure import figures
 
 
 # function for get all commands
-def get_commands(context: Context):
-    return [FollowCommand(context), HistoryCommand(context), OtherSearch(context),
-            MoneySearch(context), CheckMoney(context)] + \
-           [ShapeSearch(figure, context) for figure in figures]
+def get_commands():
+    return [FollowCommand(), HistoryCommand(), OtherSearch(),
+            MoneySearch(), CheckMoney()] + \
+           [ShapeSearch(figure) for figure in figures]
 
 
 # get command for text
-def get_command(text, context: Context):
-    for command in get_commands(context):
+def get_command(text):
+    for command in get_commands():
         if text.lower() in command.key_word.lower():
             return command
-    return NothingCommand(context)
+    return NothingCommand()
 
 
 class Command(ABC):
-
-    def __init__(self, context: Context):
-        self._context = context
 
     # выполнение команды
     @abstractmethod
@@ -45,8 +41,8 @@ class Command(ABC):
 # command for search shapes
 class ShapeSearch(Command):
 
-    def __init__(self, figure, context):
-        super().__init__(context)
+    def __init__(self, figure):
+        super().__init__()
         self.__figure = figure
 
     __figure = Circle()
