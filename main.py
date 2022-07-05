@@ -60,7 +60,7 @@ async def send_type(message: types.Message):
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
     t_id = message.from_user.id
-    user = authentication(context, t_id)
+    user = authentication(context, message.from_user)
     if isinstance(user, Admin):
         command = BoostCommand()
         text = command.message
@@ -74,10 +74,13 @@ async def send_boost(message: types.Message):
 async def send_echo(message: types.Message):
     t_id = message.from_user.id
     text = message.text
-    command = get_command(text)
-    user = authentication(context, t_id)
-    command.execute(user)
-    await message.reply(command.message, reply_markup=get_none_kb())
+    if 'ты' in text.lower():
+        await message.reply("Да", reply_markup=get_none_kb())
+    else:
+        command = get_command(text)
+        user = authentication(context, message.from_user)
+        command.execute(user)
+        await message.reply(command.message, reply_markup=get_none_kb())
 
 
 async def scheduled(wait_for):
