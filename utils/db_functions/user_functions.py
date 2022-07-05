@@ -10,8 +10,8 @@ def get_user_by_id(t_id):
 
 # add user in table
 def add_user(user: User):
-    UserDbModel.create(name=user.get_name(), id=user.get_id(), start_date=user.get_start_date(),
-                       cash_account=user.get_money()).save()
+    UserDbModel(name=user.get_name(), id=user.get_id(), start_date=user.get_start_date(),
+                cash_account=user.get_money()).save()
 
 
 # function for check admin rules

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import datetime
 
 from utils.db_functions.requset_functions import get_request
 from utils.models.context import Context
@@ -29,7 +28,7 @@ class Command(ABC):
 
     # выполнение команды
     @abstractmethod
-    def execute(self):
+    def execute(self, user):
         pass
 
     # сообщение которое выведет команда с началом работы
@@ -52,7 +51,7 @@ class ShapeSearch(Command):
 
     __figure = Circle()
 
-    def execute(self):
+    def execute(self, user):
         pass
         # todo search shape
 
@@ -68,11 +67,11 @@ class ShapeSearch(Command):
 # command that does nothing
 class NothingCommand(Command):
 
-    def execute(self):
+    def execute(self, t_id):
         pass
 
     @Command.message.getter
-    def message(self):
+    def message(self, user):
         return 'Моя твоя не понимать'
 
     @Command.key_word.getter
@@ -83,7 +82,7 @@ class NothingCommand(Command):
 # command for search money
 class MoneySearch(Command):
 
-    def execute(self):
+    def execute(self, user):
         pass
         # todo search money
 
@@ -100,7 +99,7 @@ class MoneySearch(Command):
 class OtherSearch(Command):
     _text = ''
 
-    def execute(self):
+    def execute(self, user):
         pass
         # todo search object
 
@@ -120,7 +119,7 @@ class OtherSearch(Command):
 # command for get follow images
 class FollowCommand(Command):
 
-    def execute(self):
+    def execute(self, user):
         pass
         # todo print follows
 
@@ -137,8 +136,7 @@ class FollowCommand(Command):
 class HistoryCommand(Command):
     _message: str
 
-    def execute(self):
-        user = self._context.get_user()
+    def execute(self, user):
         try:
             for request in get_request(user):
                 self._message += request.to_string() + "\n"
@@ -158,8 +156,7 @@ class HistoryCommand(Command):
 class CheckMoney(Command):
     _message: str
 
-    def execute(self):
-        user = self._context.get_user()
+    def execute(self, user):
         name = user.get_name()
         money = user.get_money()
         self._message = f"{name}, ваш баланс: {money}"

@@ -30,7 +30,7 @@ async def send_welcome(message: types.Message):
         else:
             text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
 
-    except:
+    except Exception as ex:
         t_id = message.from_user.id
         name = message.from_user.first_name
         money = 100
@@ -38,7 +38,7 @@ async def send_welcome(message: types.Message):
         user = User(t_id=t_id, name=name, date=date, money=money)
         add_user(user)
         text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
-    context.set_user(user)
+    context.add_user(user)
     await message.answer(text)
 
 
@@ -61,7 +61,8 @@ async def send_type(message: types.Message):
 # handler of /boost command
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
-    user = context.get_user()
+    t_id = message.from_user.id
+    user = context.get_user_by_id(t_id)
     if isinstance(user, Admin):
         text = "можите выдать права"
     else:
@@ -72,10 +73,11 @@ async def send_boost(message: types.Message):
 # handler оf others command
 @dp.message_handler()
 async def send_echo(message: types.Message):
+    t_id = message.from_user.id
     keyboard = types.ReplyKeyboardRemove()
     text = message.text
     command = get_command(text, context)
-    command.execute()
+    command.execute(context.get_user_by_id(t_id))
     await message.reply(command.message, reply_markup=keyboard)
 
 
