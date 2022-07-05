@@ -4,6 +4,11 @@ from utils.models.user import *
 
 # function for get user by id from Data Base
 def get_user_by_id(t_id):
+    """
+    add user in table
+    :param t_id: id of telegram user
+    :return User:
+    """
     user = UserDbModel.get(id=t_id)
     return User(name=user.name, t_id=user.id, date=user.start_date, money=user.money_account)
 
@@ -19,7 +24,11 @@ def add_user(user: User):
 
 
 def check_on_admin(user: User):
-    """function for check admin rules: """
+    """
+    function for check admin rules:
+    :param user: User
+    :return boolean:
+    """
     try:
         AdminDbModel.get_by_id(user.get_id())
     except Exception:
@@ -60,3 +69,8 @@ def get_manager_by_id(t_id):
 def get_manager_by_user(user):
     """function for get admin user"""
     return Manager(user=user, token="")
+
+
+def add_manager(user):
+    """function for add manager in table"""
+    ManagerDbModel.create(user_id=user.get_id())

@@ -7,7 +7,8 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from keyboards.inline.menu import *
-from utils.models.command import get_command, NothingCommand
+from utils.functions.authentication import authentication
+from utils.models.command import *
 from utils.db_functions.user_functions import *
 logging.basicConfig(level=logging.INFO)
 
@@ -59,9 +60,10 @@ async def send_type(message: types.Message):
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
     t_id = message.from_user.id
-    user = context.get_user_by_id(t_id)
+    user = authentication(context, t_id)
     if isinstance(user, Admin):
-        text = "можите выдать права"
+        command = BoostCommand()
+        text = "Введите id пользователя кому вы хотите выдать права менеджера"
     else:
         text = NothingCommand().message
     await message.answer(text)

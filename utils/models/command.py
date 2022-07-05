@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from utils.db_functions.requset_functions import get_request
+from utils.db_functions.user_functions import add_manager
 from utils.models.figure import Circle
 from utils.models.figure import figures
 
@@ -63,11 +64,11 @@ class ShapeSearch(Command):
 # command that does nothing
 class NothingCommand(Command):
 
-    def execute(self, t_id):
+    def execute(self, user):
         pass
 
     @Command.message.getter
-    def message(self, user):
+    def message(self):
         return 'Моя твоя не понимать'
 
     @Command.key_word.getter
@@ -148,8 +149,8 @@ class HistoryCommand(Command):
         return "история"
 
 
-# command for check money by user
 class CheckMoney(Command):
+    """Command for check money of user"""
     _message: str
 
     def execute(self, user):
@@ -164,3 +165,18 @@ class CheckMoney(Command):
     @Command.key_word.getter
     def key_word(self):
         return "баланс"
+
+
+class BoostCommand(Command):
+    """Command for boost rules of user"""
+
+    def execute(self, user):
+        add_manager(user)
+
+    @Command.message.getter
+    def message(self):
+        return "Введите id пользователя кому вы хотите выдать права менеджера"
+
+    @Command.key_word.getter
+    def key_word(self):
+        return "boost"
