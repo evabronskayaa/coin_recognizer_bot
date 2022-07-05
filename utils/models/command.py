@@ -6,21 +6,6 @@ from utils.models.figure import Circle
 from utils.models.figure import figures
 
 
-def get_commands():
-    """Function for get all commands"""
-    return [FollowCommand(), HistoryCommand(), OtherSearch(),
-            MoneySearch(), CheckMoney()] + \
-           [ShapeSearch(figure) for figure in figures]
-
-
-def get_command(text):
-    """Get command for text"""
-    for command in get_commands():
-        if text.lower() in command.key_word.lower():
-            return command
-    return NothingCommand()
-
-
 class Command(ABC):
 
     # выполнение команды
@@ -30,17 +15,18 @@ class Command(ABC):
 
     # сообщение которое выведет команда с началом работы
     @property
-    def message(self):
+    def message(self) -> str:
         pass
 
     # ключевое слово по которому мы поймем что нужно выполнить данную команду
     @property
-    def key_word(self):
+    def key_word(self) -> str:
         pass
 
 
 class ShapeSearch(Command):
     """Command for search shapes"""
+
     def __init__(self, figure):
         super().__init__()
         self.__figure = figure
@@ -62,6 +48,7 @@ class ShapeSearch(Command):
 
 class NothingCommand(Command):
     """Command that does nothing"""
+
     def execute(self, user):
         pass
 
@@ -76,6 +63,7 @@ class NothingCommand(Command):
 
 class MoneySearch(Command):
     """Command for search money"""
+
     def execute(self, user):
         pass
         # todo search money
@@ -112,6 +100,7 @@ class OtherSearch(Command):
 
 class FollowCommand(Command):
     """Command for get follow images"""
+
     def execute(self, user):
         pass
         # todo print follows
@@ -152,7 +141,7 @@ class CheckMoney(Command):
     def execute(self, user):
         name = user.get_name()
         money = user.get_money()
-        self._message = f"{name}, ваш баланс: {money}"
+        self._message = f"{name}, ваш баланс: {money} баллов"
 
     @Command.message.getter
     def message(self):
@@ -176,3 +165,18 @@ class BoostCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return "boost"
+
+
+def get_commands() -> list[Command]:
+    """Function for get all commands"""
+    return [FollowCommand(), HistoryCommand(), OtherSearch(),
+            MoneySearch(), CheckMoney()] + \
+           [ShapeSearch(figure) for figure in figures]
+
+
+def get_command(text):
+    """Get command for text"""
+    for command in get_commands():
+        if text.lower() in command.key_word.lower():
+            return command
+    return NothingCommand()

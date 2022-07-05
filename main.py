@@ -75,7 +75,8 @@ async def send_echo(message: types.Message):
     t_id = message.from_user.id
     text = message.text
     command = get_command(text)
-    command.execute(context.get_user_by_id(t_id))
+    user = authentication(context, t_id)
+    command.execute(user)
     await message.reply(command.message, reply_markup=get_none_kb())
 
 
@@ -88,6 +89,3 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled(10))
     executor.start_polling(dp, skip_updates=True)
-
-  # , 'Распознать по слову'] + \
-    # [f"Распознать на фото {figure.name}и" for figure in figures]
