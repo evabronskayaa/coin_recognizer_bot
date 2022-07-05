@@ -1,5 +1,8 @@
 import logging
 import asyncio
+
+from aiogram.types import ContentType
+
 import utils.models.context
 
 from aiogram import Bot
@@ -10,6 +13,7 @@ from keyboards.inline.menu import *
 from utils.functions.authentication import authentication
 from utils.models.command import *
 from utils.db_functions.user_functions import *
+
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
@@ -59,7 +63,6 @@ async def send_type(message: types.Message):
 # handler of /boost command
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
-    t_id = message.from_user.id
     user = authentication(context, message.from_user)
     if isinstance(user, Admin):
         command = BoostCommand()
@@ -69,10 +72,29 @@ async def send_boost(message: types.Message):
     await message.answer(text)
 
 
+# handler of /boost command
+@dp.message_handler(commands=['drop'])
+async def send_boost(message: types.Message):
+    user = authentication(context, message.from_user)
+    if isinstance(user, Admin):
+        command = DropCommand()
+        text = command.message
+    else:
+        text = NothingCommand().message
+    await message.answer(text)
+
+
 # handler оf others command
+@dp.message_handler(content_types=['photo'])
+async def handle_docs_photo(message: types.Message):
+
+    await bot.send_photo(photo='http://risovach.ru/upload/2013/10/mem/a-huy-tebe_33321944_orig_.jpeg',
+                         chat_id=message.chat.id)
+
+
+# handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
-    t_id = message.from_user.id
     text = message.text
     if 'ты' in text.lower():
         await message.reply("Да", reply_markup=get_none_kb())
@@ -89,6 +111,4 @@ async def scheduled(wait_for):
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.create_task(scheduled(10))
     executor.start_polling(dp, skip_updates=True)

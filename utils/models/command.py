@@ -167,6 +167,21 @@ class BoostCommand(Command):
         return "boost"
 
 
+class DropCommand(Command):
+    """Command for boost rules of user"""
+
+    def execute(self, user):
+        add_manager(user)
+
+    @Command.message.getter
+    def message(self):
+        return "Введите id пользователя у кого хотите забрать права менеджера"
+
+    @Command.key_word.getter
+    def key_word(self):
+        return "drop"
+
+
 def get_commands() -> list[Command]:
     """Function for get all commands"""
     return [FollowCommand(), HistoryCommand(), OtherSearch(),
