@@ -63,7 +63,7 @@ async def send_boost(message: types.Message):
     user = authentication(context, t_id)
     if isinstance(user, Admin):
         command = BoostCommand()
-        text = "Введите id пользователя кому вы хотите выдать права менеджера"
+        text = command.message
     else:
         text = NothingCommand().message
     await message.answer(text)

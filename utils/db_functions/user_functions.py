@@ -5,7 +5,7 @@ from utils.models.user import *
 # function for get user by id from Data Base
 def get_user_by_id(t_id):
     """
-    add user in table
+    get user from table
     :param t_id: id of telegram user
     :return User:
     """
@@ -38,19 +38,31 @@ def check_on_admin(user: User):
 
 
 def get_admin_by_id(t_id):
-    """function for get admin user"""
+    """
+    Function for get admin user
+    :param t_id:
+    :return Admin:
+    """
     admin = AdminDbModel.get(user_id=t_id)
     user = get_user_by_id(admin.user_id)
     return Admin(user=user)
 
 
 def get_admin_by_user(user):
-    """function for get admin user"""
+    """
+    Function for get admin user
+    :param user: User
+    :return Admin:
+    """
     return Admin(user=user)
 
 
 def check_on_manager(user: User):
-    """function for check manager rules"""
+    """
+    Function for check manager rules
+    :param user: User
+    :return bool:
+    """
     try:
         ManagerDbModel.get_by_id(user.get_id())
     except Exception:
@@ -60,17 +72,29 @@ def check_on_manager(user: User):
 
 
 def get_manager_by_id(t_id):
-    """function for get manager rules"""
+    """
+    Function for get manager rules
+    :param t_id: int
+    :return Manager:
+    """
     manager = ManagerDbModel.get(user_id=t_id)
     user = get_user_by_id(manager.user_id)
     return Manager(user=user, token="")
 
 
 def get_manager_by_user(user):
-    """function for get admin user"""
+    """
+    Function for get admin user
+    :param user: User
+    :return Manager:
+    """
     return Manager(user=user, token="")
 
 
 def add_manager(user):
-    """function for add manager in table"""
+    """
+    Function for add manager in table
+    :param user: User
+    :return None:
+    """
     ManagerDbModel.create(user_id=user.get_id())

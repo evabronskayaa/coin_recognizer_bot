@@ -2,6 +2,12 @@ from utils.db_functions.user_functions import *
 
 
 def authentication(context, t_id):
+    """
+    Function for get current user
+    :param t_id: if of user
+    :param context: bot's context
+    :return user: User | Admin
+    """
     try:
         return context.get_user_by_id(t_id)
     except:

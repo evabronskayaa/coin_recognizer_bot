@@ -6,15 +6,15 @@ from utils.models.figure import Circle
 from utils.models.figure import figures
 
 
-# function for get all commands
 def get_commands():
+    """Function for get all commands"""
     return [FollowCommand(), HistoryCommand(), OtherSearch(),
             MoneySearch(), CheckMoney()] + \
            [ShapeSearch(figure) for figure in figures]
 
 
-# get command for text
 def get_command(text):
+    """Get command for text"""
     for command in get_commands():
         if text.lower() in command.key_word.lower():
             return command
@@ -39,9 +39,8 @@ class Command(ABC):
         pass
 
 
-# command for search shapes
 class ShapeSearch(Command):
-
+    """Command for search shapes"""
     def __init__(self, figure):
         super().__init__()
         self.__figure = figure
@@ -61,9 +60,8 @@ class ShapeSearch(Command):
         return f"распознать на фото {self.__figure.name.lower()}и"
 
 
-# command that does nothing
 class NothingCommand(Command):
-
+    """Command that does nothing"""
     def execute(self, user):
         pass
 
@@ -76,9 +74,8 @@ class NothingCommand(Command):
         return ""
 
 
-# command for search money
 class MoneySearch(Command):
-
+    """Command for search money"""
     def execute(self, user):
         pass
         # todo search money
@@ -92,8 +89,8 @@ class MoneySearch(Command):
         return f"загрузить фото"
 
 
-# command for search other objects
 class OtherSearch(Command):
+    """Command for search other objects"""
     _text = ''
 
     def execute(self, user):
@@ -113,9 +110,8 @@ class OtherSearch(Command):
         self._text = word
 
 
-# command for get follow images
 class FollowCommand(Command):
-
+    """Command for get follow images"""
     def execute(self, user):
         pass
         # todo print follows
@@ -129,8 +125,8 @@ class FollowCommand(Command):
         return "избранное"
 
 
-# command for get history of command
 class HistoryCommand(Command):
+    """Command for get history of command"""
     _message: str
 
     def execute(self, user):
