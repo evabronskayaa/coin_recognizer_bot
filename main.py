@@ -81,6 +81,7 @@ async def send_reduce(message: types.Message):
     if isinstance(user, Admin):
         command = ReduceCommand()
         text = command.message
+        context.set_last_command(user, command)
     else:
         text = NothingCommand().message
     await message.answer(text)
@@ -117,14 +118,19 @@ async def send_echo(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)
-        if not isinstance(command,NothingCommand):
+        if not isinstance(command, NothingCommand):
             command.execute(message.text)
             text = command.message
             context.set_last_command(user, NothingCommand())
         else:
-            text = first_execure(message.text, user)
+            command = first_execure(message.text, user)
+            context.set_last_command(user, command)
+            print(command)
+            text = command.message
     except:
-        text = first_execure(message.text, user)
+        command = first_execure(message.text, user)
+        context.set_last_command(user, command)
+        text = command.message
     await message.reply(text, reply_markup=get_none_kb())
 
 

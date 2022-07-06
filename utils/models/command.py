@@ -190,23 +190,25 @@ class BoostCommand(Command):
 class ReduceCommand(Command):
     """Command for reduce rule of manager"""
 
+    _message = "Введите id пользователя у кого хотите забрать права менеджера"
+
     def execute(self, data):
         try:
             t_id = int(data)
             user = User(t_id=t_id)
-            result = add_manager(user)
+            result = remove_manager(user)
             if result is None:
                 self._message = "Данный пользователь не найден"
             elif result:
                 self._message = "Успешно"
             else:
-                self._message = "Данный пользователь уже является Менеджером"
+                self._message = "Данный пользователь не является Менеджером"
         except:
             self._message = "Это не id"
 
     @Command.message.getter
     def message(self):
-        return "Введите id пользователя у кого хотите забрать права менеджера"
+        return self._message
 
     @Command.key_word.getter
     def key_word(self):
@@ -270,6 +272,7 @@ def get_command(text):
 
 
 def first_execure(text, user):
+    """Execute command not according to the script"""
     command = get_command(text)
     command.execute(user)
-    return command.message
+    return command
