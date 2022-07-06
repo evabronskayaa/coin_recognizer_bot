@@ -1,4 +1,4 @@
-from utils.models.command import *
+from utils.models.commands.command import Command
 from utils.models.user import User
 
 

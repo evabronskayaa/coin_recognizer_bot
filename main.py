@@ -1,23 +1,22 @@
 import logging
 import asyncio
 
-import utils.models.context
-
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from keyboards.inline.menu import *
 from utils.functions.authentication import authentication_with_start
-from utils.models.context import *
-from utils.models.command import *
+from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
+from utils.models.context import Context
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-context = utils.models.context.Context()
+
+context = Context()
 
 
 # handler оf /start command

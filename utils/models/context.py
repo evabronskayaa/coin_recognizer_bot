@@ -1,4 +1,5 @@
-from utils.models.command import *
+from utils.models.commands.command import Command
+from utils.models.commands.nothing_command import NothingCommand
 from utils.models.script import Script
 from utils.models.user import User
 
