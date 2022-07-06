@@ -88,7 +88,7 @@ async def send_reduce(message: types.Message):
 
 # handler of /stat command
 @dp.message_handler(commands=['stat'])
-async def send_reduce(message: types.Message):
+async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     if isinstance(user, Admin) | isinstance(user, Manager):
         command = StatCommand()
@@ -100,7 +100,7 @@ async def send_reduce(message: types.Message):
 
 # handler of /id command
 @dp.message_handler(commands=['id'])
-async def send_reduce(message: types.Message):
+async def send_id(message: types.Message):
     await message.answer(message.from_user.id)
 
 
@@ -117,11 +117,14 @@ async def send_echo(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)
-        text = script_execute_command(message.text, command, context)
+        if not isinstance(command,NothingCommand):
+            command.execute(message.text)
+            text = command.message
+            context.set_last_command(user, NothingCommand())
+        else:
+            text = first_execure(message.text, user)
     except:
-        command = get_command(message.text)
-        command.execute(user)
-        text = command.message
+        text = first_execure(message.text, user)
     await message.reply(text, reply_markup=get_none_kb())
 
 

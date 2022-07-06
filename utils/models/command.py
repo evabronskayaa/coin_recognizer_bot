@@ -12,7 +12,7 @@ class Command(ABC):
 
     # выполнение команды
     @abstractmethod
-    def execute(self, user):
+    def execute(self, data):
         pass
 
     # сообщение которое выведет команда с началом работы
@@ -35,7 +35,7 @@ class ShapeSearch(Command):
 
     __figure = Circle()
 
-    def execute(self, user):
+    def execute(self, data):
         pass
         # todo search shape
 
@@ -51,7 +51,7 @@ class ShapeSearch(Command):
 class NothingCommand(Command):
     """Command that does nothing"""
 
-    def execute(self, user):
+    def execute(self, data):
         pass
 
     @Command.message.getter
@@ -66,7 +66,7 @@ class NothingCommand(Command):
 class MoneySearch(Command):
     """Command for search money"""
 
-    def execute(self, user):
+    def execute(self, data):
         pass
         # todo search money
 
@@ -83,7 +83,7 @@ class OtherSearch(Command):
     """Command for search other objects"""
     _text = ''
 
-    def execute(self, user):
+    def execute(self, data):
         pass
         # todo search object
 
@@ -103,7 +103,7 @@ class OtherSearch(Command):
 class FollowCommand(Command):
     """Command for get follow images"""
 
-    def execute(self, user):
+    def execute(self, data):
         pass
         # todo print follows
 
@@ -120,8 +120,9 @@ class HistoryCommand(Command):
     """Command for get history of command"""
     _message: str
 
-    def execute(self, user):
+    def execute(self, data):
         try:
+            user = data
             for request in get_request(user):
                 self._message += request.to_string() + "\n"
         except:
@@ -140,10 +141,14 @@ class CheckMoney(Command):
     """Command for check money of user"""
     _message: str
 
-    def execute(self, user):
-        name = user.get_name()
-        money = user.get_money()
-        self._message = f"{name}, ваш баланс: {money} баллов"
+    def execute(self, data):
+        try:
+            user = data
+            name = user.get_name()
+            money = user.get_money()
+            self._message = f"{name}, ваш баланс: {money} баллов"
+        except:
+            self._message = "Техническая ошибка"
 
     @Command.message.getter
     def message(self):
@@ -159,14 +164,19 @@ class BoostCommand(Command):
 
     _message = "Введите id пользователя кому вы хотите выдать права менеджера"
 
-    def execute(self, user):
-        result = add_manager(user)
-        if result is None:
-            self._message = "Данный пользователь не найден"
-        elif result:
-            self._message = "Успешно"
-        else:
-            self._message = "Данный пользователь уже является Менеджером"
+    def execute(self, data):
+        try:
+            t_id = int(data)
+            user = User(t_id=t_id)
+            result = add_manager(user)
+            if result is None:
+                self._message = "Данный пользователь не найден"
+            elif result:
+                self._message = "Успешно"
+            else:
+                self._message = "Данный пользователь уже является Менеджером"
+        except:
+            self._message = "Это не id"
 
     @Command.message.getter
     def message(self):
@@ -180,8 +190,19 @@ class BoostCommand(Command):
 class ReduceCommand(Command):
     """Command for reduce rule of manager"""
 
-    def execute(self, user):
-        return remove_manager(user)
+    def execute(self, data):
+        try:
+            t_id = int(data)
+            user = User(t_id=t_id)
+            result = add_manager(user)
+            if result is None:
+                self._message = "Данный пользователь не найден"
+            elif result:
+                self._message = "Успешно"
+            else:
+                self._message = "Данный пользователь уже является Менеджером"
+        except:
+            self._message = "Это не id"
 
     @Command.message.getter
     def message(self):
@@ -246,3 +267,9 @@ def get_command(text):
         if text.lower() in command.key_word.lower():
             return command
     return NothingCommand()
+
+
+def first_execure(text, user):
+    command = get_command(text)
+    command.execute(user)
+    return command.message
