@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from data.texts.ru_text.command_text import *
 from utils.db_functions.requset_functions import get_request
-from utils.db_functions.user_functions import add_manager
+from utils.db_functions.user_functions import *
 from utils.models.figure import Circle
 from utils.models.figure import figures
 from utils.models.user import *
@@ -158,7 +158,7 @@ class BoostCommand(Command):
     """Command for boost rules for admin"""
 
     def execute(self, user):
-        add_manager(user)
+        return add_manager(user)
 
     @Command.message.getter
     def message(self):
@@ -173,7 +173,7 @@ class ReduceCommand(Command):
     """Command for reduce rule of manager"""
 
     def execute(self, user):
-        add_manager(user)
+        return remove_manager(user)
 
     @Command.message.getter
     def message(self):
