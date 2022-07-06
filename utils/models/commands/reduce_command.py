@@ -30,7 +30,7 @@ class ReduceCommand(Command):
 
     @Command.key_word.getter
     def key_word(self):
-        return "drop"
+        return "/reduce"
 
     @Command.is_script.getter
     def is_script(self) -> bool:

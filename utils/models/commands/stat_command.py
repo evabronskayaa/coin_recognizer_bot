@@ -13,7 +13,7 @@ class StatCommand(Command):
 
     @Command.key_word.getter
     def key_word(self):
-        return "stat"
+        return "/stat"
 
     @Command.is_script.getter
     def is_script(self) -> bool:

@@ -4,15 +4,17 @@ from utils.models.figure import *
 
 class ShapeSearch(Command):
     """Command for search shapes"""
+    _continue = True
 
     def __init__(self, figure):
         super().__init__()
         self.__figure = figure
+        self._continue = True
 
     __figure = Circle()
 
     def execute(self, data):
-        pass
+        self._continue = False
         # todo search shape
 
     @Command.message.getter
@@ -25,4 +27,4 @@ class ShapeSearch(Command):
 
     @Command.is_script.getter
     def is_script(self) -> bool:
-        return True
+        return self._continue

@@ -24,7 +24,7 @@ def get_commands() -> list[Command]:
 def get_command(text):
     """Get command for text"""
     for command in get_commands():
-        if text.lower() in command.key_word.lower():
+        if text.lower() == command.key_word.lower():
             return command
     return NothingCommand()
 

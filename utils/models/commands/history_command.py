@@ -24,6 +24,7 @@ class HistoryCommand(Command):
             self._continue = False
         else:
             self._message = "Неправельные данные"
+            self._continue = False
 
     @Command.message.getter
     def message(self):

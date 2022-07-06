@@ -116,10 +116,12 @@ async def handle_docs_photo(message: types.Message):
 async def send_echo(message: types.Message):
     def get_text():
         s_command = first_execure(message.text, user)
+        print(s_command)
         if s_command.is_script:
             context.set_last_command(user, s_command)
         return s_command.message
 
+    print(message.text)
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)
@@ -130,6 +132,7 @@ async def send_echo(message: types.Message):
                 context.set_last_command(user, NothingCommand())
         else:
             text = get_text()
+            print()
     except:
         text = get_text()
     await message.reply(text, reply_markup=get_none_kb())

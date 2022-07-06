@@ -9,7 +9,7 @@ class OtherSearch(Command):
 
     def execute(self, data):
         self._continue = False
-        # todo search object
+        # TODO search object
 
     @Command.message.getter
     def message(self):
