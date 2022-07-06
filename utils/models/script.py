@@ -1,4 +1,4 @@
-from utils.models.command import Command, NothingCommand
+from utils.models.command import *
 from utils.models.user import User
 
 
@@ -27,4 +27,3 @@ class Script:
             self._last_coomand = command
             return True
         return False
-

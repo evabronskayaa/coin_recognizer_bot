@@ -18,7 +18,7 @@ class Context:
     def add_user(self, user: User):
         users = [script.get_user() for script in self._scripts]
         if user.get_id() >= 0 or user.get_id() not in [user2.get_id() for user2 in users]:
-            self._scripts.append(Script(user, None))
+            self._scripts.append(Script(user, NothingCommand()))
 
     def _get_script(self, user):
         for script in self._scripts:
@@ -38,3 +38,16 @@ class Context:
             return True
         except:
             return False
+
+
+def script_execute_command(data: any, command: Command, context: Context):
+    if isinstance(command, BoostCommand):
+        try:
+            t_id = int(data)
+            user = User(t_id=t_id)
+            command.execute(user)
+            return command.message
+        except:
+            return "Это не id"
+    else:
+        raise Exception("incorrect command")
