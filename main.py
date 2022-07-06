@@ -9,6 +9,7 @@ from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
+from data.texts.ru_text.command_text import *
 from keyboards.inline.menu import *
 from utils.functions.authentication import authentication
 from utils.models.command import *
@@ -50,8 +51,10 @@ async def send_welcome(message: types.Message):
 # handler оf /help command
 @dp.message_handler(commands=['help'])
 async def send_help(message: types.Message):
-    message_text = f'Ты можешь управлять мною, используя эти команды\n'
-    await message.answer(text=message_text)
+    user = authentication(context, message.from_user)
+    help_cmd = HelpCommand()
+    help_cmd.execute(user)
+    await message.answer(text=help_cmd.message)
 
 
 # handler оf /menu command
@@ -72,7 +75,7 @@ async def send_boost(message: types.Message):
     await message.answer(text)
 
 
-# handler of /boost command
+# handler of /reduce command
 @dp.message_handler(commands=['reduce'])
 async def send_reduce(message: types.Message):
     user = authentication(context, message.from_user)
@@ -84,10 +87,21 @@ async def send_reduce(message: types.Message):
     await message.answer(text)
 
 
+# handler of /stat command
+@dp.message_handler(commands=['stat'])
+async def send_reduce(message: types.Message):
+    user = authentication(context, message.from_user)
+    if isinstance(user, Admin) | isinstance(user, Manager):
+        command = StatCommand()
+        text = command.message
+    else:
+        text = NothingCommand().message
+    await message.answer(text, reply_markup=get_stat_kb())
+
+
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
-
     await bot.send_photo(photo='http://risovach.ru/upload/2013/10/mem/a-huy-tebe_33321944_orig_.jpeg',
                          chat_id=message.chat.id)
 

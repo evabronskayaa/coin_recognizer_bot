@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
+from data.texts.ru_text.command_text import *
 from utils.db_functions.requset_functions import get_request
 from utils.db_functions.user_functions import add_manager
 from utils.models.figure import Circle
 from utils.models.figure import figures
+from utils.models.user import *
 
 
 class Command(ABC):
@@ -180,6 +182,47 @@ class ReduceCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return "drop"
+
+
+class StatCommand(Command):
+    """Command for get statistics by manager"""
+
+    def execute(self, user):
+        pass
+
+    @Command.message.getter
+    def message(self):
+        return "Выберте статистику которую хотите узнать"
+
+    @Command.key_word.getter
+    def key_word(self):
+        return "stat"
+
+
+class HelpCommand(Command):
+    """Command for get help message"""
+
+    _message = " "
+
+    def execute(self, user):
+        message_text = help_text
+        if isinstance(user, Manager):
+            message_text = help_text_manager + """
+
+Выше приведённые команды доступны менеджеру системы"""
+        elif isinstance(user, Admin):
+            message_text = help_text_admin + """
+
+Выше приведённые команды доступны администратору системы"""
+        self._message = message_text
+
+    @Command.message.getter
+    def message(self):
+        return self._message
+
+    @Command.key_word.getter
+    def key_word(self):
+        return "help"
 
 
 def get_commands() -> list[Command]:
