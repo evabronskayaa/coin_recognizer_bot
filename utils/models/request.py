@@ -7,14 +7,17 @@ from utils.models.user import User
 
 
 class Request:
-    __message: string
-    __date: datetime
-    __user: User
-    __image: Image
+    _message: string
+    _date: datetime
+    _user: User
+    _image: Image = None
 
     def __init__(self, message, date, user, image_bytes):
-        self.__message = message
-        self.__date = date
-        self.__user = user
+        self._message = message
+        self._date = date
+        self._user = user
         if image_bytes is not None:
-            self.__image = Image.open(io.BytesIO(image_bytes))
+            self._image = Image.open(io.BytesIO(image_bytes))
+
+    def to_string(self):
+        return f"сообщение: {self._message}, дата: {self._date} "
