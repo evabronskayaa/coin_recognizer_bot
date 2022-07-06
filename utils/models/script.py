@@ -27,4 +27,4 @@ class Script:
             self._last_coomand = command
             return True
         return False
-        
+

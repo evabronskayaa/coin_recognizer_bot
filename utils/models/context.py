@@ -1,28 +1,27 @@
 from utils.models.command import *
+from utils.models.script import Script
 from utils.models.user import User
 
 
 class Context:
-    _users = []
-    _last_command: Command
+    _scripts = []
 
     def __init__(self):
-        self._users: list[User] = []
-        self._last_command = NothingCommand()
+        self._scripts: list[Script] = []
 
     def get_user_by_id(self, t_id):
-        for user in self._users:
+        for user in [script.get_user() for script in self._scripts]:
             if user.get_id() == t_id:
                 return user
         raise Exception('inccorect value')
 
     def add_user(self, user: User):
-        if user.get_id() >= 0 | user.get_id() not in [user2.get_id() for user2 in self._users]:
-            self._users.append(user)
+        users = [script.get_user() for script in self._scripts]
+        if user.get_id() >= 0 or user.get_id() not in [user2.get_id() for user2 in users]:
+            self._scripts.append(Script(user, None))
 
-    def get_last_command(self):
-        return self._last_command
-
-    def set_last_command(self, command):
-        if not isinstance(command, NothingCommand):
-            self._last_command = command
+    def get_last_commdn(self, user: User) -> Command:
+        for script in self._scripts:
+            if script.get_user().get_id() is user.get_id():
+                return script.get_last_command()
+        raise Exception('script not found')
