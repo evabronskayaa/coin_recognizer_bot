@@ -99,6 +99,12 @@ async def send_reduce(message: types.Message):
     await message.answer(text, reply_markup=get_stat_kb())
 
 
+# handler of /id command
+@dp.message_handler(commands=['id'])
+async def send_reduce(message: types.Message):
+    await message.answer(message.from_user.id, reply_markup=get_stat_kb())
+
+
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
