@@ -20,8 +20,21 @@ class Context:
         if user.get_id() >= 0 or user.get_id() not in [user2.get_id() for user2 in users]:
             self._scripts.append(Script(user, None))
 
-    def get_last_commdn(self, user: User) -> Command:
+    def _get_script(self, user):
         for script in self._scripts:
             if script.get_user().get_id() is user.get_id():
-                return script.get_last_command()
+                return script
         raise Exception('script not found')
+
+    def get_last_command(self, user: User) -> Command:
+        try:
+            return self._get_script(user).get_last_command()
+        except:
+            raise Exception("command not found")
+
+    def set_last_command(self, user: User, command: Command) -> bool:
+        try:
+            self._get_script(user).set_last_command(command)
+            return True
+        except:
+            return False

@@ -107,13 +107,10 @@ async def handle_docs_photo(message: types.Message):
 @dp.message_handler()
 async def send_echo(message: types.Message):
     text = message.text
-    if 'ты' in text.lower():
-        await message.reply("Да", reply_markup=get_none_kb())
-    else:
-        command = get_command(text)
-        user = authentication(context, message.from_user)
-        command.execute(user)
-        await message.reply(command.message, reply_markup=get_none_kb())
+    command = get_command(text)
+    user = authentication(context, message.from_user)
+    command.execute(user)
+    await message.reply(command.message, reply_markup=get_none_kb())
 
 
 async def scheduled(wait_for):

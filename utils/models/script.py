@@ -23,7 +23,7 @@ class Script:
         return self._last_coomand
 
     def set_last_command(self, command: Command):
-        if command is not None and isinstance(command, NothingCommand):
+        if command is not None:
             self._last_coomand = command
             return True
         return False
