@@ -95,14 +95,18 @@ def add_manager(user):
     """
     Function for add manager in table
     :param user: User
-    :return: bool
+    :return: bool | None
     """
     try:
         ManagerDbModel.get(user_id=user.get_id())
         return False
     except:
-        ManagerDbModel.create(user_id=user.get_id())
-        return True
+        try:
+            UserDbModel.get(id=user.get_id())
+            ManagerDbModel.create(user_id=user.get_id())
+            return True
+        except:
+            return None
 
 
 def remove_manager(user):

@@ -157,12 +157,20 @@ class CheckMoney(Command):
 class BoostCommand(Command):
     """Command for boost rules for admin"""
 
+    _message = "Введите id пользователя кому вы хотите выдать права менеджера"
+
     def execute(self, user):
-        return add_manager(user)
+        result = add_manager(user)
+        if result is None:
+            self._message = "Данный пользователь не найден"
+        elif result:
+            self._message = "Успешно"
+        else:
+            self._message = "Данный пользователь уже является Менеджером"
 
     @Command.message.getter
     def message(self):
-        return "Введите id пользователя кому вы хотите выдать права менеджера"
+        return self._message
 
     @Command.key_word.getter
     def key_word(self):
