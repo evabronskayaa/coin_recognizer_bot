@@ -73,11 +73,11 @@ async def send_boost(message: types.Message):
 
 
 # handler of /boost command
-@dp.message_handler(commands=['drop'])
-async def send_boost(message: types.Message):
+@dp.message_handler(commands=['reduce'])
+async def send_reduce(message: types.Message):
     user = authentication(context, message.from_user)
     if isinstance(user, Admin):
-        command = DropCommand()
+        command = ReduceCommand()
         text = command.message
     else:
         text = NothingCommand().message

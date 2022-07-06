@@ -153,7 +153,7 @@ class CheckMoney(Command):
 
 
 class BoostCommand(Command):
-    """Command for boost rules of user"""
+    """Command for boost rules for admin"""
 
     def execute(self, user):
         add_manager(user)
@@ -167,8 +167,8 @@ class BoostCommand(Command):
         return "boost"
 
 
-class DropCommand(Command):
-    """Command for boost rules of user"""
+class ReduceCommand(Command):
+    """Command for reduce rule of manager"""
 
     def execute(self, user):
         add_manager(user)
