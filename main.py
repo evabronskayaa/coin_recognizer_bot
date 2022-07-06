@@ -127,7 +127,8 @@ async def send_echo(message: types.Message):
         if not isinstance(command, NothingCommand):
             command.execute(message.text)
             text = command.message
-            context.set_last_command(user, NothingCommand())
+            if not command.is_script:
+                context.set_last_command(user, NothingCommand())
         else:
             text = get_text()
     except:

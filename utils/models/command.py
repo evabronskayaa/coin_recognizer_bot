@@ -5,6 +5,7 @@ from utils.db_functions.requset_functions import get_request
 from utils.db_functions.user_functions import *
 from utils.models.figure import Circle
 from utils.models.figure import figures
+from utils.models.request import RequestData
 from utils.models.user import *
 
 
@@ -143,14 +144,24 @@ class FollowCommand(Command):
 class HistoryCommand(Command):
     """Command for get history of command"""
     _message: str
+    _user: User
+    _continue = False
 
     def execute(self, data):
-        try:
-            user = data
-            for request in get_request(user):
-                self._message += request.to_string() + "\n"
-        except:
-            self._message = "вы еще не делали запросы"
+        if isinstance(data, User) and not self._continue:
+            self._user = data
+            self._continue = True
+            self._message = "выберите дату"
+        elif data.lower() == "посмотреть полностью" and self._continue:
+            try:
+                user = self._user
+                for request in get_request(user):
+                    self._message += request.to_string() + "\n"
+            except:
+                self._message = "вы еще не делали запросы"
+            self._continue = False
+        else:
+            self._message = "Неправельные данные"
 
     @Command.message.getter
     def message(self):
@@ -162,7 +173,7 @@ class HistoryCommand(Command):
 
     @Command.is_script.getter
     def is_script(self) -> bool:
-        return False
+        return self._continue
 
 
 class CheckMoney(Command):
@@ -191,6 +202,7 @@ class BoostCommand(Command):
     """Command for boost rules for admin"""
 
     _message = "Введите id пользователя кому вы хотите выдать права менеджера"
+    _continue = True
 
     def execute(self, data):
         try:
@@ -205,6 +217,7 @@ class BoostCommand(Command):
                 self._message = "Данный пользователь уже является Менеджером"
         except:
             self._message = "Это не id"
+        self._continue = False
 
     @Command.message.getter
     def message(self):
@@ -216,13 +229,14 @@ class BoostCommand(Command):
 
     @Command.is_script.getter
     def is_script(self) -> bool:
-        return True
+        return self._continue
 
 
 class ReduceCommand(Command):
     """Command for reduce rule of manager"""
 
     _message = "Введите id пользователя у кого хотите забрать права менеджера"
+    _continue = True
 
     def execute(self, data):
         try:
@@ -237,6 +251,7 @@ class ReduceCommand(Command):
                 self._message = "Данный пользователь не является Менеджером"
         except:
             self._message = "Это не id"
+        self._continue = False
 
     @Command.message.getter
     def message(self):
@@ -248,7 +263,7 @@ class ReduceCommand(Command):
 
     @Command.is_script.getter
     def is_script(self) -> bool:
-        return True
+        return self._continue
 
 
 class StatCommand(Command):
