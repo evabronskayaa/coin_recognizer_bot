@@ -69,7 +69,6 @@ async def send_boost(message: types.Message):
         command = BoostCommand()
         text = command.message
         context.set_last_command(user, command)
-        print("send")
     else:
         text = NothingCommand().message
     await message.answer(text)
@@ -102,7 +101,7 @@ async def send_reduce(message: types.Message):
 # handler of /id command
 @dp.message_handler(commands=['id'])
 async def send_reduce(message: types.Message):
-    await message.answer(message.from_user.id, reply_markup=get_stat_kb())
+    await message.answer(message.from_user.id)
 
 
 # handler оf others command
