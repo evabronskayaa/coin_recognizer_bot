@@ -25,6 +25,10 @@ class Command(ABC):
     def key_word(self) -> str:
         pass
 
+    @property
+    def is_script(self) -> bool:
+        pass
+
 
 class ShapeSearch(Command):
     """Command for search shapes"""
@@ -47,6 +51,10 @@ class ShapeSearch(Command):
     def key_word(self):
         return f"распознать на фото {self.__figure.name.lower()}и"
 
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
+
 
 class NothingCommand(Command):
     """Command that does nothing"""
@@ -61,6 +69,10 @@ class NothingCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return ""
+
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return False
 
 
 class MoneySearch(Command):
@@ -78,6 +90,10 @@ class MoneySearch(Command):
     def key_word(self):
         return f"загрузить фото"
 
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
+
 
 class OtherSearch(Command):
     """Command for search other objects"""
@@ -94,6 +110,10 @@ class OtherSearch(Command):
     @Command.key_word.getter
     def key_word(self):
         return "распознать по слову"
+
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
 
     # записываем то что будем искать на картинке
     def set_word(self, word):
@@ -115,6 +135,10 @@ class FollowCommand(Command):
     def key_word(self):
         return "избранное"
 
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return False
+
 
 class HistoryCommand(Command):
     """Command for get history of command"""
@@ -135,6 +159,10 @@ class HistoryCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return "история"
+
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return False
 
 
 class CheckMoney(Command):
@@ -186,6 +214,10 @@ class BoostCommand(Command):
     def key_word(self):
         return "boost"
 
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
+
 
 class ReduceCommand(Command):
     """Command for reduce rule of manager"""
@@ -214,6 +246,10 @@ class ReduceCommand(Command):
     def key_word(self):
         return "drop"
 
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
+
 
 class StatCommand(Command):
     """Command for get statistics by manager"""
@@ -228,6 +264,10 @@ class StatCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return "stat"
+
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return True
 
 
 class HelpCommand(Command):
@@ -254,6 +294,10 @@ class HelpCommand(Command):
     @Command.key_word.getter
     def key_word(self):
         return "help"
+
+    @Command.is_script.getter
+    def is_script(self) -> bool:
+        return False
 
 
 def get_commands() -> list[Command]:

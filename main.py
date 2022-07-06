@@ -115,6 +115,12 @@ async def handle_docs_photo(message: types.Message):
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
+    def get_text():
+        s_command = first_execure(message.text, user)
+        if s_command.is_script:
+            context.set_last_command(user, s_command)
+        return s_command.message
+
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)
@@ -123,14 +129,9 @@ async def send_echo(message: types.Message):
             text = command.message
             context.set_last_command(user, NothingCommand())
         else:
-            command = first_execure(message.text, user)
-            context.set_last_command(user, command)
-            print(command)
-            text = command.message
+            text = get_text()
     except:
-        command = first_execure(message.text, user)
-        context.set_last_command(user, command)
-        text = command.message
+        text = get_text()
     await message.reply(text, reply_markup=get_none_kb())
 
 
