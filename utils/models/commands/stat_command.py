@@ -1,5 +1,6 @@
 from enum import Enum
 
+from keyboards.inline.menu import get_date_db
 from utils.models.commands.command import Command
 
 
@@ -12,7 +13,7 @@ class Type(Enum):
 class StatCommand(Command):
     """Command for get statistics by manager"""
 
-    _message = "Выберте статистику которую хотите узнать"
+    _message = "Выберите статистику которую хотите узнать"
     _type: Type = None
     _continue = True
     _menu = None
@@ -20,12 +21,24 @@ class StatCommand(Command):
     def execute(self, data):
         if self._type is None:
             self._message = "Выбирите дату"
-            if data == 'По новым пользователям':
+            if data.lower() == 'по новым пользователям':
                 self._type = Type.USER
-            elif data == 'По запросам пользователей':
+                self._menu = get_date_db()
+            elif data.lower() == 'по запросам пользователей':
                 self._type = Type.REQUEST
+                self._menu = get_date_db()
             else:
                 self.message = "Такой кнопки нет"
+                self._continue = False
+        else:
+            self._menu = None
+            if data.lower() == "ввести самостоятельно":
+                self._message = "Введите дату в формате DD.MM.YYYY или DD/MM/YYYY"
+            else:
+                self._continue = False
+
+    def _get_stat(self, start_date, finish_date):
+        2
 
     @Command.message.getter
     def message(self):
