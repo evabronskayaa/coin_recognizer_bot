@@ -1,5 +1,6 @@
 import logging
 import asyncio
+from datetime import datetime, timedelta
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
@@ -115,6 +116,7 @@ async def handle_docs_photo(message: types.Message):
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
+
     def get_text():
         s_command = first_execure(message.text, user)
         if s_command.is_script:

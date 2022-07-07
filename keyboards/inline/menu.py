@@ -20,6 +20,11 @@ def get_stat_kb():
     return keyboard
 
 
+all_time_text = 'Все время'
+last_day_text = 'Последний день'
+self_print = 'Ввести самостоятельно'
+
+
 def get_date_db():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     btn = KeyboardButton('Ввести самостоятельно')
