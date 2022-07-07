@@ -23,6 +23,10 @@ class OtherSearch(Command):
     def is_script(self) -> bool:
         return self._continue
 
+    @Command.get_menu.getter
+    def get_menu(self):
+        return None
+
     # записываем то что будем искать на картинке
     def set_word(self, word):
         self._text = word

@@ -35,3 +35,7 @@ class ReduceCommand(Command):
     @Command.is_script.getter
     def is_script(self) -> bool:
         return self._continue
+
+    @Command.get_menu.getter
+    def get_menu(self):
+        return None

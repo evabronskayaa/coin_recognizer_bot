@@ -19,3 +19,7 @@ class FollowCommand(Command):
     @Command.is_script.getter
     def is_script(self) -> bool:
         return False
+
+    @Command.get_menu.getter
+    def get_menu(self):
+        return None

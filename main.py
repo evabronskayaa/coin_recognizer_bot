@@ -92,6 +92,7 @@ async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     if isinstance(user, Admin) | isinstance(user, Manager):
         command = StatCommand()
+        context.set_last_command(user, command)
         text = command.message
     else:
         text = NothingCommand().message
@@ -116,12 +117,10 @@ async def handle_docs_photo(message: types.Message):
 async def send_echo(message: types.Message):
     def get_text():
         s_command = first_execure(message.text, user)
-        print(s_command)
         if s_command.is_script:
             context.set_last_command(user, s_command)
         return s_command.message
 
-    print(message.text)
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)

@@ -8,7 +8,7 @@ class Command(ABC):
     def execute(self, data):
         pass
 
-    # сообщение которое выведет команда с началом работы
+    # сообщение, которое выведет команда с началом работы
     @property
     def message(self) -> str:
         pass
@@ -18,9 +18,12 @@ class Command(ABC):
     def key_word(self) -> str:
         pass
 
+    # булевская переменная для того что бы показать нужно ли дальше работать с этой командой или она выполнена
     @property
     def is_script(self) -> bool:
         pass
 
-
-
+    # получить меню для телеграм бота
+    @property
+    def get_menu(self):
+        pass
