@@ -2,7 +2,7 @@ from utils.db_models.models import *
 
 
 def init_db():
-    db.create_tables([UserDbModel, ManagerDbModel, AdminDbModel, RequestDbModel, FollowDbModel])
+    db.create_tables([RequestDbModel, FollowDbModel])
 
 
 init_db()

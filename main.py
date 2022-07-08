@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher

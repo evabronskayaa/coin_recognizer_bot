@@ -38,8 +38,8 @@ class AdminDbModel(Worker):
 class RequestDbModel(Worker):
     date = DateTimeField(null=False)
     message = CharField(null=True)
-    data = BigBitField(null=True)
-    id = IntegerField(unique=True, null=False, help_text="id of Request", primary_key=True)
+    rating = BooleanField(null=True)
+    id = CharField(unique=True, null=False, help_text="telegram id of Request", primary_key=True)
 
     class Meta:
         order_by = 'date'
