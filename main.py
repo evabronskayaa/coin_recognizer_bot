@@ -112,10 +112,11 @@ async def handle_docs_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     command = context.get_last_command(user)
     if isinstance(command, MoneySearch):
-        command.execute(user)
-        await message.answer()
-    await bot.send_photo(photo=message.photo[-1].file_id,
-                         chat_id=message.from_user.id)
+        command.execute(message.photo[-1])
+        await message.answer(command.message)
+    else:
+        await bot.send_photo(photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
+                             chat_id=message.from_user.id)
 
 
 # handler of other's text
