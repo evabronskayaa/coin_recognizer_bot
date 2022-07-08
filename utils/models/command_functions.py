@@ -13,24 +13,17 @@ from utils.models.commands.reduce_command import ReduceCommand
 from utils.models.figure import figures
 
 
-def get_commands() -> list[Command]:
+def get_commands(bot) -> list[Command]:
     """Function for get all commands"""
-    return [FollowCommand(), HistoryCommand(), OtherSearch(),
+    return [FollowCommand(bot), HistoryCommand(), OtherSearch(),
             MoneySearch(), CheckBalance(), HelpCommand(),
             BoostCommand(), StatCommand(), ReduceCommand()] + \
            [ShapeSearch(figure) for figure in figures]
 
 
-def get_command(text):
+def get_command(text, bot):
     """Get command for text"""
-    for command in get_commands():
+    for command in get_commands(bot):
         if text.lower() == command.key_word.lower():
             return command
     return NothingCommand()
-
-
-def first_execure(text, user):
-    """Execute command not according to the script"""
-    command = get_command(text)
-    command.execute(user)
-    return command

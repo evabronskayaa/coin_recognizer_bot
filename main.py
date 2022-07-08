@@ -109,8 +109,13 @@ async def send_id(message: types.Message):
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
-    await bot.send_photo(photo='https://risovach.ru/upload/2013/10/mem/a-huy-tebe_33321944_orig_.jpeg',
-                         chat_id=message.chat.id)
+    user = authentication_with_start(context, message.from_user)
+    command = context.get_last_command(user)
+    if isinstance(command, MoneySearch):
+        command.execute(user)
+        await message.answer()
+    await bot.send_photo(photo=message.photo[-1].file_id,
+                         chat_id=message.from_user.id)
 
 
 # handler of other's text
@@ -118,7 +123,8 @@ async def handle_docs_photo(message: types.Message):
 async def send_echo(message: types.Message):
 
     def get_s_command():
-        s_command = first_execure(message.text, user)
+        s_command = get_command(message.text, bot)
+        s_command.execute(user)
         if s_command.is_script:
             context.set_last_command(user, s_command)
         return s_command

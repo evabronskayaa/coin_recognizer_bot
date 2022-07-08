@@ -64,7 +64,6 @@ class StatCommand(Command):
                             self._execute_stat()
                         elif data.lower() == last_day_text.lower():
                             start = datetime.today() - timedelta(1)
-                            print(start)
                             self._continue = False
                             self._execute_stat(start)
                         else:
