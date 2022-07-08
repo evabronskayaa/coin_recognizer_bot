@@ -27,7 +27,9 @@ self_print = 'Ввести самостоятельно'
 
 def get_date_db():
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    btn = KeyboardButton('Ввести самостоятельно')
-    buttons = ['Все время', 'Последний день']
+    btn = KeyboardButton(self_print)
+    buttons = [all_time_text, last_day_text]
     keyboard.row(*buttons).add(btn)
     return keyboard
+
+

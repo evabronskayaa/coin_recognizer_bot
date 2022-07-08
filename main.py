@@ -117,11 +117,11 @@ async def handle_docs_photo(message: types.Message):
 @dp.message_handler()
 async def send_echo(message: types.Message):
 
-    def get_text():
+    def get_s_command():
         s_command = first_execure(message.text, user)
         if s_command.is_script:
             context.set_last_command(user, s_command)
-        return s_command.message
+        return s_command
 
     menu = get_none_kb()
     user = authentication_with_start(context, message.from_user)
@@ -135,9 +135,12 @@ async def send_echo(message: types.Message):
             if command.get_menu is not None:
                 menu = command.get_menu
         else:
-            text = get_text()
+            command = get_s_command()
+            text = command.message
+            if command.get_menu is not None:
+                menu = command.get_menu
     except:
-        text = get_text()
+        text = get_s_command().message
     await message.reply(text, reply_markup=menu)
 
 
