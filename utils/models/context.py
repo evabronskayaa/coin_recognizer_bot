@@ -1,4 +1,5 @@
-from utils.models.command import *
+from utils.models.commands.command import Command
+from utils.models.commands.nothing_command import NothingCommand
 from utils.models.script import Script
 from utils.models.user import User
 
@@ -38,16 +39,3 @@ class Context:
             return True
         except:
             return False
-
-
-def script_execute_command(data: any, command: Command, context: Context):
-    if isinstance(command, BoostCommand):
-        try:
-            t_id = int(data)
-            user = User(t_id=t_id)
-            command.execute(user)
-            return command.message
-        except:
-            return "Это не id"
-    else:
-        raise Exception("incorrect command")

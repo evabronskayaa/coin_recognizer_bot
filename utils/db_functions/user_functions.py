@@ -120,4 +120,8 @@ def remove_manager(user):
         manager.delete_instance()
         return True
     except:
-        return False
+        try:
+            UserDbModel.get(id=user.get_id())
+            return False
+        except:
+            return None

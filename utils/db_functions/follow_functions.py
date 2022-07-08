@@ -1,15 +1,16 @@
 from utils.db_models.models import *
 from utils.models.request import Request
+from utils.models.user import User
 
 
-def get_follows(user):
+def get_follows(user: User):
     """
     Function for get all follows of user
     :param user: User
     :return None:
     """
-    follows = FollowDbModel.get(user_id=user.get_id())
-    requests_db = [RequestDbModel.get(id=follow.request_id) for follow in follows]
+    follows = FollowDbModel.select().where(FollowDbModel.user_id == user.get_id())
+    requests_db = [RequestDbModel.get(RequestDbModel.id == follow.request_id) for follow in follows]
     return [Request(message=request.message, date=request.date, user=user, image_bytes=request.data)
             for request in requests_db]
 

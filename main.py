@@ -1,7 +1,6 @@
 import logging
 import asyncio
-
-import utils.models.context
+from datetime import datetime, timedelta
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
@@ -9,15 +8,16 @@ from aiogram.utils import executor
 from data.config import TOKEN
 from keyboards.inline.menu import *
 from utils.functions.authentication import authentication_with_start
-from utils.models.context import *
-from utils.models.command import *
+from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
+from utils.models.context import Context
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-context = utils.models.context.Context()
+
+context = Context()
 
 
 # handler оf /start command
@@ -69,7 +69,6 @@ async def send_boost(message: types.Message):
         command = BoostCommand()
         text = command.message
         context.set_last_command(user, command)
-        print("send")
     else:
         text = NothingCommand().message
     await message.answer(text)
@@ -82,6 +81,7 @@ async def send_reduce(message: types.Message):
     if isinstance(user, Admin):
         command = ReduceCommand()
         text = command.message
+        context.set_last_command(user, command)
     else:
         text = NothingCommand().message
     await message.answer(text)
@@ -89,35 +89,66 @@ async def send_reduce(message: types.Message):
 
 # handler of /stat command
 @dp.message_handler(commands=['stat'])
-async def send_reduce(message: types.Message):
+async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     if isinstance(user, Admin) | isinstance(user, Manager):
         command = StatCommand()
+        context.set_last_command(user, command)
         text = command.message
     else:
         text = NothingCommand().message
     await message.answer(text, reply_markup=get_stat_kb())
 
 
+# handler of /id command
+@dp.message_handler(commands=['id'])
+async def send_id(message: types.Message):
+    await message.answer(message.from_user.id)
+
+
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
-    await bot.send_photo(photo='https://risovach.ru/upload/2013/10/mem/a-huy-tebe_33321944_orig_.jpeg',
-                         chat_id=message.chat.id)
+    user = authentication_with_start(context, message.from_user)
+    command = context.get_last_command(user)
+    if isinstance(command, MoneySearch):
+        command.execute(message.photo[-1])
+        await message.answer(command.message)
+    else:
+        await bot.send_photo(photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
+                             chat_id=message.from_user.id)
 
 
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
+
+    def get_s_command():
+        s_command = get_command(message.text, bot)
+        s_command.execute(user)
+        if s_command.is_script:
+            context.set_last_command(user, s_command)
+        return s_command
+
+    menu = get_none_kb()
     user = authentication_with_start(context, message.from_user)
     try:
         command = context.get_last_command(user)
-        text = script_execute_command(message.text, command, context)
+        if not isinstance(command, NothingCommand):
+            command.execute(message.text)
+            text = command.message
+            if not command.is_script:
+                context.set_last_command(user, NothingCommand())
+            if command.get_menu is not None:
+                menu = command.get_menu
+        else:
+            command = get_s_command()
+            text = command.message
+            if command.get_menu is not None:
+                menu = command.get_menu
     except:
-        command = get_command(message.text)
-        command.execute(user)
-        text = command.message
-    await message.reply(text, reply_markup=get_none_kb())
+        text = get_s_command().message
+    await message.reply(text, reply_markup=menu)
 
 
 async def scheduled(wait_for):
