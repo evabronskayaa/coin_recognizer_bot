@@ -49,6 +49,7 @@ class HistoryCommand(Command):
                     if self._manual:
                         self._message = "Неправильно введена дата попробуйте еще раз"
                     else:
+                        self._continue = False
                         self._message = "Такой кнопки нет"
 
     def _get_req_message(self, start=datetime.min, finish=datetime.today()):

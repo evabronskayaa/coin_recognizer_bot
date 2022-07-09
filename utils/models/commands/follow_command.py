@@ -1,5 +1,3 @@
-from aiogram.types import InputFile
-
 from utils.db_functions.follow_functions import get_follows
 from utils.models.commands.command import Command
 from aiogram import Bot
@@ -23,8 +21,7 @@ class FollowCommand(Command):
                 self._message = "Держи"
                 for request in requests:
                     try:
-                        file = InputFile(path_or_bytesio=request.get_image_bytes())
-                        self._bot.send_photo(chat_id=user.get_id(), photo=file)
+                        self._bot.send_photo(chat_id=user.get_id(), photo=request.get_id())
                     except:
                         self._message = "хм"
             else:

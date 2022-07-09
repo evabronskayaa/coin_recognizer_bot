@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
@@ -36,7 +36,7 @@ async def send_welcome(message: types.Message):
 
     except Exception:
         t_id = message.from_user.id
-        name = message.from_user.first_name
+        name = message.from_user.username
         money = 100
         date = datetime.date.today()
         user = User(t_id=t_id, name=name, date=date, money=money)
