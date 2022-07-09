@@ -10,9 +10,9 @@ class CheckBalance(Command):
             user = data
             name = user.get_name()
             money = user.get_money()
-            self._message = f"{name}, ваш баланс: {money} баллов"
+            self._message = f'{name}, Ваш баланс: {money} баллов'
         except:
-            self._message = "Техническая ошибка"
+            self._message = 'Техническая ошибка'
 
     @Command.message.getter
     def message(self):
@@ -20,7 +20,7 @@ class CheckBalance(Command):
 
     @Command.key_word.getter
     def key_word(self):
-        return "баланс"
+        return 'баланс'
 
     @Command.is_script.getter
     def is_script(self) -> bool:

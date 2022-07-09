@@ -21,7 +21,7 @@ class HistoryCommand(Command):
     def execute(self, data):
         if isinstance(data, User):
             self._user = data
-            self._message = "выберите дату"
+            self._message = "Ввести период"
             self._menu = get_date_db()
         else:
             self._menu = None

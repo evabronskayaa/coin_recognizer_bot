@@ -19,7 +19,7 @@ class Request:
         self._rating = rating
 
     def to_string(self):
-        return f"сообщение: {self._message}, дата: {self._date} "
+        return f'сообщение: {self._message}, дата: {self._date} '
 
     def get_id(self):
         return self._id

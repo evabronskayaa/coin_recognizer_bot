@@ -6,7 +6,7 @@ from utils.models.user import User
 class BoostCommand(Command):
     """Command for boost rules for admin"""
 
-    _message = "Введите id пользователя кому вы хотите выдать права менеджера"
+    _message = "Введите id пользователя кому Вы хотите выдать права менеджера"
     _continue = True
 
     def execute(self, data):
@@ -19,7 +19,7 @@ class BoostCommand(Command):
             elif result:
                 self._message = "Успешно"
             else:
-                self._message = "Данный пользователь уже является Менеджером"
+                self._message = "Данный пользователь уже является менеджером"
         except:
             self._message = "Это не id"
         self._continue = False

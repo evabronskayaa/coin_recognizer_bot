@@ -9,7 +9,7 @@ class NothingCommand(Command):
 
     @Command.message.getter
     def message(self):
-        return 'Моя твоя не понимать'
+        return 'Данные введены некорректно, попробуйте еще раз'
 
     @Command.key_word.getter
     def key_word(self):

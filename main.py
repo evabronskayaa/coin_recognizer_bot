@@ -32,7 +32,7 @@ async def send_welcome(message: types.Message):
             user = get_manager_by_user(user)
             text = f'Привет, {user.get_name()}. Вы вошли в систему как менеджер'
         else:
-            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать деньги на фото'
 
     except Exception:
         t_id = message.from_user.id
@@ -41,7 +41,7 @@ async def send_welcome(message: types.Message):
         date = datetime.date.today()
         user = User(t_id=t_id, name=name, date=date, money=money)
         add_user(user)
-        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать деньги на фото'
     context.add_user(user)
     await message.answer(text)
 
@@ -58,7 +58,7 @@ async def send_help(message: types.Message):
 # handler оf /menu command
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
-    await message.answer(f'Ну давай, выбирай', reply_markup=get_menu_kb())
+    await message.answer(f'Выберите пункт меню', reply_markup=get_menu_kb())
 
 
 # handler of /boost command

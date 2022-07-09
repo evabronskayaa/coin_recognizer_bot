@@ -14,7 +14,7 @@ class Context:
         for user in [script.get_user() for script in self._scripts]:
             if user.get_id() == t_id:
                 return user
-        raise Exception('inccorect value')
+        raise Exception('incorrect value')
 
     def add_user(self, user: User):
         users = [script.get_user() for script in self._scripts]
@@ -31,7 +31,7 @@ class Context:
         try:
             return self._get_script(user).get_last_command()
         except:
-            raise Exception("command not found")
+            raise Exception('command not found')
 
     def set_last_command(self, user: User, command: Command) -> bool:
         try:

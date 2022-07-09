@@ -7,7 +7,7 @@ from utils.models.user import User
 
 class FollowCommand(Command):
     """Command for get follow images"""
-    _message = "suck"
+    _message = "хе-хе"
     _bot: Bot = None
 
     def __init__(self, bot):
