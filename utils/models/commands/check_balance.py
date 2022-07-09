@@ -1,9 +1,13 @@
+from data.texts.balance_command_text import contact, error
+from keyboards.inline.menu import *
 from utils.models.commands.command import Command
 
 
 class CheckBalance(Command):
     """Command for check money of user"""
     _message: str
+    _continue = True
+    _menu = None
 
     def execute(self, data):
         try:
@@ -11,8 +15,14 @@ class CheckBalance(Command):
             name = user.get_name()
             money = user.get_money()
             self._message = f'{name}, Ваш баланс: {money} баллов'
+            self._menu = get_balance_kb()
         except:
-            self._message = 'Техническая ошибка'
+            if data.lower() == top_up.lower():
+                self._message = contact
+                self._menu = None
+            else:
+                self._message = error
+            self._continue = False
 
     @Command.message.getter
     def message(self):
@@ -24,8 +34,8 @@ class CheckBalance(Command):
 
     @Command.is_script.getter
     def is_script(self) -> bool:
-        return False
+        return self._continue
 
     @Command.get_menu.getter
     def get_menu(self):
-        return None
+        return self._menu

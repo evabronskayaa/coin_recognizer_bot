@@ -1,6 +1,5 @@
-from utils.db_functions.user_functions import add_manager
+from utils.db_functions.user_functions import *
 from utils.models.commands.command import Command
-from utils.models.user import User
 from data.texts.boost_command_text import *
 
 
@@ -13,16 +12,22 @@ class BoostCommand(Command):
     def execute(self, data):
         try:
             t_id = int(data)
-            user = User(t_id=t_id)
-            result = add_manager(user)
+            result = add_manager_by_id(t_id)
             if result is None:
-                self._message = "Данный пользователь не найден"
+                self._message = user_not_found
             elif result:
-                self._message = "Успешно"
+                self._message = successfully
             else:
-                self._message = "Данный пользователь уже является менеджером"
+                self._message = user_is_manager
         except:
-            self._message = "Это не id"
+            data = data.replace('@', '', 1)
+            result = add_manager_by_name(data)
+            if result is None:
+                self._message = user_not_found
+            elif result:
+                self._message = successfully
+            else:
+                self._message = user_is_manager
         self._continue = False
 
     @Command.message.getter

@@ -24,37 +24,73 @@ def add_user(user: User):
                        money_account=user.get_money(), is_manager=user.is_manager(), is_admin=user.is_admin())
 
 
-def add_manager(user):
+def add_manager_by_id(t_id):
     """
-    Function for add manager in table
-    :param user: User
+    Function for add manager in table by id
+    :param t_id: telegram id of user
     :return: bool | None
     """
     try:
-        UserDbModel.get(UserDbModel.id == user.get_id() & UserDbModel.is_manager == False)
-        return False
-    except:
-        try:
-            add_user(user)
+        user = UserDbModel.get(UserDbModel.id == t_id)
+        if user.is_manager:
+            return False
+        else:
+            user.is_manager = True
+            user.save()
             return True
-        except:
-            return None
+    except:
+        return None
 
 
-def remove_manager(user):
+def add_manager_by_name(name):
+    """
+    Function for add manager in table by name
+    :param name: user's username
+    :return: bool | None
+    """
+    try:
+        user = UserDbModel.get(UserDbModel.name == name)
+        if user.is_manager:
+            return False
+        else:
+            user.is_manager = True
+            user.save()
+            return True
+    except:
+        return None
+
+
+def remove_manager_by_id(t_id):
     """
     Function for remove manager from table
-    :param user:
+    :param t_id: telegram id
     :return:bool
     """
     try:
-        manager = UserDbModel.get(UserDbModel.id == user.get_id() & UserDbModel.is_manager == True)
-        manager.is_manager = False
-        manager.save()
-        return True
-    except:
-        try:
-            UserDbModel.get(UserDbModel.id == user.get_id())
+        user = UserDbModel.get(UserDbModel.id == t_id)
+        if user.is_manager:
+            user.is_manager = False
+            user.save()
+            return True
+        else:
             return False
-        except:
-            return None
+    except:
+        return None
+
+
+def remove_manager_by_name(name):
+    """
+    Function for remove manager from table
+    :param name: username
+    :return:bool
+    """
+    try:
+        user = UserDbModel.get(UserDbModel.name == name)
+        if user.is_manager:
+            user.is_manager = False
+            user.save()
+            return True
+        else:
+            return False
+    except:
+        return None

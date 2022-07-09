@@ -1,27 +1,33 @@
-from utils.db_functions.user_functions import remove_manager
+from data.texts.reduce_command_text import *
+from utils.db_functions.user_functions import remove_manager_by_id, remove_manager_by_name
 from utils.models.commands.command import Command
-from utils.models.user import User
 
 
 class ReduceCommand(Command):
     """Command for reduce rule of manager"""
 
-    _message = "Введите id пользователя у кого хотите забрать права менеджера"
+    _message = default_text
     _continue = True
 
     def execute(self, data):
         try:
             t_id = int(data)
-            user = User(t_id=t_id)
-            result = remove_manager(user)
+            result = remove_manager_by_id(t_id)
             if result is None:
-                self._message = "Данный пользователь не найден"
+                self._message = user_not_found
             elif result:
-                self._message = "Успешно"
+                self._message = successfully
             else:
-                self._message = "Данный пользователь не является менеджером"
+                self._message = user_isnt_manager
         except:
-            self._message = "Это не id"
+            data = data.replace('@', '', 1)
+            result = remove_manager_by_name(data)
+            if result is None:
+                self._message = user_not_found
+            elif result:
+                self._message = successfully
+            else:
+                self._message = user_isnt_manager
         self._continue = False
 
     @Command.message.getter
