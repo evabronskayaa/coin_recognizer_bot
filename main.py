@@ -90,7 +90,7 @@ async def send_reduce(message: types.Message):
 async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     if user.is_manager() or user.is_admin():
-        command = StatCommand()
+        command = StatCommand(bot)
         context.set_last_command(user, command)
     else:
         command = NothingCommand()

@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta
 from enum import Enum
+
+from aiogram import Bot
 from dateutil import parser
 
+from data.texts.stat_command_text import *
 from keyboards.inline.menu import *
 from utils.db_functions.stat_functions import get_new_user, get_new_request
 from utils.models.commands.command import Command
@@ -16,37 +19,41 @@ class Type(Enum):
 class StatCommand(Command):
     """Command for get statistics by manager"""
 
-    _message = "Выберите статистику, которую хотите узнать"
+    _message = select_stat
     _type: Type = None
     _continue = True
     _menu = get_stat_kb()
     _start_date = None
     _finish_date = None
     _manual = False
+    _bot: Bot = None
+
+    def __init__(self, bot):
+        self._bot = bot
 
     def execute(self, data):
         if self._type is None:
-            self._message = "Выберите дату"
-            if data.lower() == 'по новым пользователям':
+            self._message = select_date
+            if data.lower() == for_new_users.lower():
                 self._type = Type.USER
                 self._menu = get_date_db()
-            elif data.lower() == 'по запросам пользователей':
+            elif data.lower() == for_new_request.lower():
                 self._type = Type.REQUEST
                 self._menu = get_date_db()
             else:
-                self._message = "Такой кнопки нет"
+                self._message = btn_dont_exist
                 self._continue = False
         else:
             self._menu = None
             if data.lower() == self_print.lower() and self._start_date is None and self._finish_date is None:
-                self._message = "Введите дату начала в формате DD.MM.YYYY или DD/MM/YYYY"
+                self._message = input_start_date
                 self._manual = True
             else:
                 try:
                     date = parser.parse(data)
                     if self._start_date is None and self._finish_date is None and self._manual:
                         self._start_date = date
-                        self._message = "Введите дату окончания в формате DD.MM.YYYY или DD/MM/YYYY"
+                        self._message = input_finish_date
 
                     elif isinstance(self._start_date, datetime) and self._finish_date is None and self._manual:
                         self._finish_date = date
@@ -57,7 +64,7 @@ class StatCommand(Command):
                             self._message = ex.args
                 except:
                     if self._manual:
-                        self._message = "Неправильно введена дата попробуйте еще раз"
+                        self._message = incorrect_date
                     else:
                         if data.lower() == all_time_text.lower():
                             self._continue = False
@@ -67,15 +74,15 @@ class StatCommand(Command):
                             self._continue = False
                             self._execute_stat(start)
                         else:
-                            self._message = "Такой кнопки нет"
+                            self._message = btn_dont_exist
 
     def _execute_stat(self, start=datetime.min, finish=datetime.today()):
         stat = self._get_stat(start, finish)
         if len(stat) == 0:
             if self._type == Type.USER:
-                self._message = "Новых пользователей за данных период нет"
+                self._message = havent_users
             elif self._type == Type.REQUEST:
-                self._message = "Новых запросов за данных период нет"
+                self._message = havent_requests
         else:
             self._message = "тут будет график"
 
