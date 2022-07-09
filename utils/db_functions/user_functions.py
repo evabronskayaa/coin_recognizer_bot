@@ -2,14 +2,24 @@ from utils.db_models.models import *
 from utils.models.user import *
 
 
-# function for get user by id from Data Base
 def get_user_by_id(t_id):
     """
-    get user from table
+    function for get user by id from Data Base
     :param t_id: id of telegram user
     :return User:
     """
     user = UserDbModel.get(UserDbModel.id == t_id)
+    return User(name=user.name, t_id=user.id, date=user.start_date, money=user.money_account,
+                manager=user.is_manager, admin=user.is_admin)
+
+
+def get_user_by_name(name):
+    """
+    function for get user by name from Data Base
+    :param name: username
+    :return User:
+    """
+    user = UserDbModel.get(UserDbModel.name == name)
     return User(name=user.name, t_id=user.id, date=user.start_date, money=user.money_account,
                 manager=user.is_manager, admin=user.is_admin)
 

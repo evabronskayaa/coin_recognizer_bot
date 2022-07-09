@@ -34,3 +34,7 @@ class User:
 
     def is_admin(self):
         return self._is_admin
+
+    def set_money(self, value):
+        if value is int:
+            self._money_account += value

@@ -1,4 +1,5 @@
 from utils.models.commands.command import Command
+from utils.models.commands.credit_command import CreditCommand
 from utils.models.commands.money_search import MoneySearch
 from utils.models.commands.check_balance import CheckBalance
 from utils.models.commands.follow_command import FollowCommand
@@ -17,7 +18,7 @@ def get_commands(bot) -> list[Command]:
     """Function for get all commands"""
     return [FollowCommand(bot), HistoryCommand(), OtherSearch(),
             MoneySearch(), CheckBalance(), HelpCommand(),
-            BoostCommand(), StatCommand(), ReduceCommand()] + \
+            BoostCommand(), StatCommand(), ReduceCommand(), CreditCommand()] + \
            [ShapeSearch(figure) for figure in figures]
 
 

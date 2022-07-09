@@ -103,6 +103,20 @@ async def send_stat(message: types.Message):
 
 
 # handler of /id command
+@dp.message_handler(commands=['credit'])
+async def send_id(message: types.Message):
+    user = authentication_with_start(context, message.from_user)
+    if user.is_manager() or user.is_manager():
+        command = CreditCommand()
+        context.set_last_command(user, command)
+        text = command.message
+    else:
+        command = NothingCommand()
+        text = command.message
+    await message.answer(text)
+
+
+# handler of /id command
 @dp.message_handler(commands=['id'])
 async def send_id(message: types.Message):
     await message.answer(f"ваш id: {message.from_user.id}")
