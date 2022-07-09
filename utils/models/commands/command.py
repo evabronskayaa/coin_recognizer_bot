@@ -2,6 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class Command(ABC):
+    _chat_id: str
+
+    def __init__(self, chat_id):
+        self._chat_id = chat_id
 
     # выполнение команды
     @abstractmethod

@@ -7,7 +7,7 @@ from data.texts.stat_command_text import *
 from keyboards.inline.menu import *
 from utils.db_functions.stat_functions import get_new_user, get_new_request
 from utils.models.Type import Type
-from utils.models.chart import build_chart
+from utils.functions.get_chart import build_chart
 from utils.models.commands.command import Command
 from utils.models.user import User
 
@@ -25,7 +25,8 @@ class StatCommand(Command):
     _bot: Bot = None
     _user: User = None
 
-    def __init__(self, bot, user):
+    def __init__(self, bot, user, chat_id):
+        super().__init__(chat_id)
         self._bot = bot
         self._user = user
 
@@ -83,7 +84,7 @@ class StatCommand(Command):
                 self._message = havent_requests
         else:
             file = build_chart(stat, self._type)
-            await self._bot.send_photo(photo=file, chat_id=self._user.get_id())
+            await self._bot.send_photo(photo=file, chat_id=self._chat_id)
             self._message = successfully
 
     def _get_stat(self, start_date, finish_date):

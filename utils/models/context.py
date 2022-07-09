@@ -16,10 +16,10 @@ class Context:
                 return user
         raise Exception('incorrect value')
 
-    def add_user(self, user: User):
+    def add_user(self, user: User, chat_id):
         users = [script.get_user() for script in self._scripts]
         if user.get_id() >= 0 or user.get_id() not in [user2.get_id() for user2 in users]:
-            self._scripts.append(Script(user, NothingCommand()))
+            self._scripts.append(Script(user, NothingCommand(chat_id)))
 
     def _get_script(self, user):
         for script in self._scripts:
