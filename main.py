@@ -49,7 +49,7 @@ async def send_welcome(message: types.Message):
 async def send_help(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     help_cmd = HelpCommand()
-    help_cmd.execute(user)
+    await help_cmd.execute(user)
     await message.answer(text=help_cmd.message)
 
 
@@ -90,7 +90,7 @@ async def send_reduce(message: types.Message):
 async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     if user.is_manager() or user.is_admin():
-        command = StatCommand(bot)
+        command = StatCommand(bot, user)
         context.set_last_command(user, command)
     else:
         command = NothingCommand()
@@ -128,7 +128,7 @@ async def handle_docs_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user)
     command = context.get_last_command(user)
     if isinstance(command, MoneySearch):
-        command.execute(message.photo[-1])
+        await command.execute(message.photo[-1])
         await message.answer(command.message)
     else:
         await bot.send_photo(
@@ -140,31 +140,36 @@ async def handle_docs_photo(message: types.Message):
 @dp.message_handler()
 async def send_echo(message: types.Message):
 
-    def get_s_command():
+    async def get_s_command():
         s_command = get_command(message.text, bot)
-        s_command.execute(user)
+        await s_command.execute(user)
         if s_command.is_script:
             context.set_last_command(user, s_command)
         return s_command
 
     menu = get_none_kb()
     user = authentication_with_start(context, message.from_user)
+    command = None
     try:
         command = context.get_last_command(user)
         if not isinstance(command, NothingCommand):
-            command.execute(message.text)
+            await command.execute(message.text)
             text = command.message
             if not command.is_script:
                 context.set_last_command(user, NothingCommand())
             if command.get_menu is not None:
                 menu = command.get_menu
         else:
-            command = get_s_command()
+            command = await get_s_command()
             text = command.message
             if command.get_menu is not None:
                 menu = command.get_menu
-    except:
-        text = get_s_command().message
+    except Exception as ex:
+        if command is None:
+            command = await get_s_command()
+            text = command.message
+        else:
+            text = ex
     await message.reply(text, reply_markup=menu)
 
 

@@ -26,3 +26,6 @@ class Request:
 
     def get_rating(self):
         return self._rating
+
+    def get_date(self):
+        return self._date

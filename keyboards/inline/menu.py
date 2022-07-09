@@ -18,8 +18,8 @@ def get_none_kb():
     return types.ReplyKeyboardRemove()
 
 
-for_new_users = 'По запросам пользователей'
-for_new_request = 'По новым пользователям'
+for_new_users = 'По новым пользователям'
+for_new_request = 'По запросам пользователей'
 
 
 def get_stat_kb():

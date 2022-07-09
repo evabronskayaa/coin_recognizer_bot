@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from enum import Enum
 
 from aiogram import Bot
 from dateutil import parser
@@ -7,17 +6,14 @@ from dateutil import parser
 from data.texts.stat_command_text import *
 from keyboards.inline.menu import *
 from utils.db_functions.stat_functions import get_new_user, get_new_request
+from utils.models.Type import Type
+from utils.models.chart import build_chart
 from utils.models.commands.command import Command
-
-
-class Type(Enum):
-    """Emun for check command"""
-    USER = 1
-    REQUEST = 2
+from utils.models.user import User
 
 
 class StatCommand(Command):
-    """Command for get statistics by manager"""
+    """Command for get statistics for manager"""
 
     _message = select_stat
     _type: Type = None
@@ -27,11 +23,13 @@ class StatCommand(Command):
     _finish_date = None
     _manual = False
     _bot: Bot = None
+    _user: User = None
 
-    def __init__(self, bot):
+    def __init__(self, bot, user):
         self._bot = bot
+        self._user = user
 
-    def execute(self, data):
+    async def execute(self, data):
         if self._type is None:
             self._message = select_date
             if data.lower() == for_new_users.lower():
@@ -59,7 +57,7 @@ class StatCommand(Command):
                         self._finish_date = date
                         self._continue = False
                         try:
-                            self._execute_stat(self._start_date, self._finish_date)
+                            await self._execute_stat(self._start_date, self._finish_date)
                         except Exception as ex:
                             self._message = ex.args
                 except:
@@ -68,15 +66,15 @@ class StatCommand(Command):
                     else:
                         if data.lower() == all_time_text.lower():
                             self._continue = False
-                            self._execute_stat()
+                            await self._execute_stat()
                         elif data.lower() == last_day_text.lower():
                             start = datetime.today() - timedelta(1)
                             self._continue = False
-                            self._execute_stat(start)
+                            await self._execute_stat(start)
                         else:
                             self._message = btn_dont_exist
 
-    def _execute_stat(self, start=datetime.min, finish=datetime.today()):
+    async def _execute_stat(self, start=datetime.min, finish=datetime.today()):
         stat = self._get_stat(start, finish)
         if len(stat) == 0:
             if self._type == Type.USER:
@@ -84,7 +82,9 @@ class StatCommand(Command):
             elif self._type == Type.REQUEST:
                 self._message = havent_requests
         else:
-            self._message = "тут будет график"
+            file = build_chart(stat, self._type)
+            await self._bot.send_photo(photo=file, chat_id=self._user.get_id())
+            self._message = successfully
 
     def _get_stat(self, start_date, finish_date):
         if self._type == Type.USER:

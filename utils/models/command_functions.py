@@ -18,7 +18,7 @@ def get_commands(bot) -> list[Command]:
     """Function for get all commands"""
     return [FollowCommand(bot), HistoryCommand(), OtherSearch(),
             MoneySearch(), CheckBalance(), HelpCommand(),
-            BoostCommand(), StatCommand(), ReduceCommand(), CreditCommand()] + \
+            BoostCommand(), ReduceCommand(), CreditCommand()] + \
            [ShapeSearch(figure) for figure in figures]
 
 
