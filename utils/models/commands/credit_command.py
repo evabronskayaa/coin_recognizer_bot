@@ -20,7 +20,7 @@ class CreditCommand(Command):
                     self._message = user_not_found
                     self._continue = False
                 else:
-                    self._user.set_money(t_id)
+                    self._user.add_money(t_id)
                     self._message = successfully
                     self._continue = False
         except:
