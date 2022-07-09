@@ -11,7 +11,7 @@ def authentication_with_start(context, t_user):
     try:
         return authentication(context, t_user.id)
     except:
-        user = User(name=t_user.first_name, t_id=t_user.id, money=100)
+        user = User(name=t_user.username, t_id=t_user.id, money=100)
         add_user(user)
         context.add_user(user)
         return user
@@ -28,7 +28,5 @@ def authentication(context, t_id):
         return context.get_user_by_id(t_id)
     except:
         user = get_user_by_id(t_id)
-        if check_on_admin(user):
-            user = get_admin_by_user(user)
         context.add_user(user)
         return user

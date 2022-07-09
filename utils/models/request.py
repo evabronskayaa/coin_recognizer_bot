@@ -26,14 +26,3 @@ class Request:
 
     def get_rating(self):
         return self._rating
-
-
-class RequestData:
-    first_date: datetime
-    less_date: datetime
-    user: User
-
-    def __init__(self, first_date, less_date, user):
-        self.first_date = first_date
-        self.less_date = less_date
-        self.user = user

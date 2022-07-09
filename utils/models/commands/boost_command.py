@@ -1,12 +1,13 @@
 from utils.db_functions.user_functions import add_manager
 from utils.models.commands.command import Command
 from utils.models.user import User
+from data.texts.boost_command_text import *
 
 
 class BoostCommand(Command):
     """Command for boost rules for admin"""
 
-    _message = "Введите id пользователя кому Вы хотите выдать права менеджера"
+    _message = default_text
     _continue = True
 
     def execute(self, data):

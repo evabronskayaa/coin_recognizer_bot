@@ -1,6 +1,5 @@
-from data.texts.ru_text.command_text import *
+from data.texts.help_command_text import *
 from utils.models.commands.command import Command
-from utils.models.user import *
 
 
 class HelpCommand(Command):

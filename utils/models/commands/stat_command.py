@@ -19,7 +19,7 @@ class StatCommand(Command):
     _message = "Выберите статистику, которую хотите узнать"
     _type: Type = None
     _continue = True
-    _menu = None
+    _menu = get_stat_kb()
     _start_date = None
     _finish_date = None
     _manual = False

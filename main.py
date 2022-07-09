@@ -25,11 +25,9 @@ context = Context()
 async def send_welcome(message: types.Message):
     try:
         user = get_user_by_id(message.from_user.id)
-        if check_on_admin(user):
-            user = get_admin_by_user(user)
+        if user.is_admin():
             text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
-        elif check_on_manager(user):
-            user = get_manager_by_user(user)
+        elif user.is_manager():
             text = f'Привет, {user.get_name()}. Вы вошли в систему как менеджер'
         else:
             text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать деньги на фото'
@@ -94,16 +92,20 @@ async def send_stat(message: types.Message):
     if user.is_manager() or user.is_admin():
         command = StatCommand()
         context.set_last_command(user, command)
-        text = command.message
     else:
-        text = NothingCommand().message
-    await message.answer(text, reply_markup=get_stat_kb())
+        command = NothingCommand()
+    text = command.message
+    if command.get_menu is None:
+        menu = get_none_kb()
+    else:
+        menu = command.get_menu
+    await message.answer(text, reply_markup=menu)
 
 
 # handler of /id command
 @dp.message_handler(commands=['id'])
 async def send_id(message: types.Message):
-    await message.answer(message.from_user.id)
+    await message.answer(f"ваш id: {message.from_user.id}")
 
 
 # handler оf others command

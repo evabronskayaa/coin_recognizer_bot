@@ -9,8 +9,9 @@ def get_user_by_id(t_id):
     :param t_id: id of telegram user
     :return User:
     """
-    user = UserDbModel.get(id=t_id)
-    return User(name=user.name, t_id=user.id, date=user.start_date, money=user.money_account)
+    user = UserDbModel.get(UserDbModel.id == t_id)
+    return User(name=user.name, t_id=user.id, date=user.start_date, money=user.money_account,
+                manager=user.is_manager, admin=user.is_admin)
 
 
 def add_user(user: User):
@@ -20,75 +21,7 @@ def add_user(user: User):
     :return None:
     """
     UserDbModel.create(name=user.get_name(), id=user.get_id(), start_date=user.get_start_date(),
-                       money_account=user.get_money())
-
-
-def check_on_admin(user: User):
-    """
-    function for check admin rules:
-    :param user: User
-    :return boolean:
-    """
-    try:
-        AdminDbModel.get_by_id(user.get_id())
-    except Exception:
-        return False
-    finally:
-        return True
-
-
-def get_admin_by_id(t_id):
-    """
-    Function for get admin user
-    :param t_id:
-    :return Admin:
-    """
-    admin = AdminDbModel.get(user_id=t_id)
-    user = get_user_by_id(admin.user_id)
-    return Admin(user=user)
-
-
-def get_admin_by_user(user):
-    """
-    Function for get admin user
-    :param user: User
-    :return Admin:
-    """
-    return Admin(user=user)
-
-
-def check_on_manager(user: User):
-    """
-    Function for check manager rules
-    :param user: User
-    :return bool:
-    """
-    try:
-        ManagerDbModel.get_by_id(user.get_id())
-    except Exception:
-        return False
-    finally:
-        return True
-
-
-def get_manager_by_id(t_id):
-    """
-    Function for get manager rules
-    :param t_id: int
-    :return Manager:
-    """
-    manager = ManagerDbModel.get(user_id=t_id)
-    user = get_user_by_id(manager.user_id)
-    return Manager(user=user, token="")
-
-
-def get_manager_by_user(user):
-    """
-    Function for get admin user
-    :param user: User
-    :return Manager:
-    """
-    return Manager(user=user, token="")
+                       money_account=user.get_money(), is_manager=user.is_manager(), is_admin=user.is_admin())
 
 
 def add_manager(user):
@@ -98,12 +31,11 @@ def add_manager(user):
     :return: bool | None
     """
     try:
-        ManagerDbModel.get(user_id=user.get_id())
+        UserDbModel.get(UserDbModel.id == user.get_id() & UserDbModel.is_manager == False)
         return False
     except:
         try:
-            UserDbModel.get(id=user.get_id())
-            ManagerDbModel.create(user_id=user.get_id())
+            add_user(user)
             return True
         except:
             return None
@@ -116,12 +48,13 @@ def remove_manager(user):
     :return:bool
     """
     try:
-        manager = ManagerDbModel.get(user_id=user.get_id())
-        manager.delete_instance()
+        manager = UserDbModel.get(UserDbModel.id == user.get_id() & UserDbModel.is_manager == True)
+        manager.is_manager = False
+        manager.save()
         return True
     except:
         try:
-            UserDbModel.get(id=user.get_id())
+            UserDbModel.get(UserDbModel.id == user.get_id())
             return False
         except:
             return None
