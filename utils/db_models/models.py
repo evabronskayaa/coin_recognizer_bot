@@ -13,6 +13,8 @@ class UserDbModel(BaseModel):
     id = IntegerField(unique=True, null=False, help_text="id that use in the Telegram", primary_key=True)
     start_date = DateTimeField(null=False, help_text="start date of using the bot")
     money_account = IntegerField(null=False)
+    is_manager = BooleanField(null=False)
+    is_admin = BooleanField(null=False)
 
     class Meta:
         order_by = 'start_date'
