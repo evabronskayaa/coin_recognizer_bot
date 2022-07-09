@@ -65,7 +65,7 @@ async def send_type(message: types.Message):
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
     user = authentication_with_start(context, message.from_user)
-    if isinstance(user, Admin):
+    if user.is_admin():
         command = BoostCommand()
         text = command.message
         context.set_last_command(user, command)
@@ -78,7 +78,7 @@ async def send_boost(message: types.Message):
 @dp.message_handler(commands=['reduce'])
 async def send_reduce(message: types.Message):
     user = authentication_with_start(context, message.from_user)
-    if isinstance(user, Admin):
+    if user.is_admin():
         command = ReduceCommand()
         text = command.message
         context.set_last_command(user, command)
@@ -91,7 +91,7 @@ async def send_reduce(message: types.Message):
 @dp.message_handler(commands=['stat'])
 async def send_stat(message: types.Message):
     user = authentication_with_start(context, message.from_user)
-    if isinstance(user, Admin) | isinstance(user, Manager):
+    if user.is_manager() or user.is_admin():
         command = StatCommand()
         context.set_last_command(user, command)
         text = command.message
@@ -115,8 +115,9 @@ async def handle_docs_photo(message: types.Message):
         command.execute(message.photo[-1])
         await message.answer(command.message)
     else:
-        await bot.send_photo(photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
-                             chat_id=message.from_user.id)
+        await bot.send_photo(
+            photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
+            chat_id=message.from_user.id)
 
 
 # handler of other's text
