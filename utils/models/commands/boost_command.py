@@ -9,7 +9,7 @@ class BoostCommand(Command):
     _message = default_text
     _continue = True
 
-    def execute(self, data):
+    async def execute(self, data):
         try:
             t_id = int(data)
             result = add_manager_by_id(t_id)

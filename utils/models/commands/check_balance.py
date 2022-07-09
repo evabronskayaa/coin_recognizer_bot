@@ -9,7 +9,7 @@ class CheckBalance(Command):
     _continue = True
     _menu = None
 
-    def execute(self, data):
+    async def execute(self, data):
         try:
             user = data
             name = user.get_name()

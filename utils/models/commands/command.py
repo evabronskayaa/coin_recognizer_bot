@@ -5,7 +5,7 @@ class Command(ABC):
 
     # выполнение команды
     @abstractmethod
-    def execute(self, data):
+    async def execute(self, data):
         pass
 
     # сообщение, которое выведет команда с началом работы

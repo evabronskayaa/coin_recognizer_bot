@@ -10,7 +10,7 @@ class MoneySearch(Command):
     _continue = True
     _user: User
 
-    def execute(self, data):
+    async def execute(self, data):
         if isinstance(data, User):
             self._user = data
         elif isinstance(data, PhotoSize):

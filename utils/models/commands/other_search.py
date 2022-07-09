@@ -7,7 +7,7 @@ class OtherSearch(Command):
     _text = ''
     _continue = True
 
-    def execute(self, data):
+    async def execute(self, data):
         self._continue = False
         # TODO search object
 

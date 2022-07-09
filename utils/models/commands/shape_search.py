@@ -13,7 +13,7 @@ class ShapeSearch(Command):
 
     __figure = Circle()
 
-    def execute(self, data):
+    async def execute(self, data):
         self._continue = False
         # todo search shape
 

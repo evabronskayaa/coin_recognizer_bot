@@ -19,7 +19,7 @@ class HistoryCommand(Command):
     _start_date = None
     _finish_date = None
 
-    def execute(self, data):
+    async def execute(self, data):
         if isinstance(data, User):
             self._user = data
             self._message = period

@@ -7,13 +7,13 @@ class HelpCommand(Command):
 
     _message = " "
 
-    def execute(self, user):
+    async def execute(self, user):
         message_text = help_text
         if user.is_manager():
             message_text = help_text_manager + """
 
 Выше приведённые команды доступны менеджеру системы"""
-        elif user.is_admin():
+        if user.is_admin():
             message_text = help_text_admin + """
 
 Выше приведённые команды доступны администратору системы"""

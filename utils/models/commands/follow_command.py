@@ -13,7 +13,7 @@ class FollowCommand(Command):
     def __init__(self, bot):
         self._bot = bot
 
-    def execute(self, data):
+    async def execute(self, data):
         if isinstance(data, User):
             user = data
             requests = get_follows(user)
@@ -21,7 +21,7 @@ class FollowCommand(Command):
                 self._message = "Держи"
                 for request in requests:
                     try:
-                        self._bot.send_photo(chat_id=user.get_id(), photo=request.get_id())
+                        await self._bot.send_photo(chat_id=user.get_id(), photo=request.get_id())
                     except:
                         self._message = "хм"
             else:

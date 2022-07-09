@@ -9,7 +9,7 @@ class CreditCommand(Command):
     _continue = True
     _user = None
 
-    def execute(self, data):
+    async def execute(self, data):
         try:
             t_id = int(data)
             try:

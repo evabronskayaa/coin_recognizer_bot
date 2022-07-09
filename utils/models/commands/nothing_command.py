@@ -4,7 +4,7 @@ from utils.models.commands.command import Command
 class NothingCommand(Command):
     """Command that does nothing"""
 
-    def execute(self, data):
+    async def execute(self, data):
         pass
 
     @Command.message.getter
