@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 
 from dateutil import parser
 
+from data.texts.history_command_text import *
 from keyboards.inline.menu import get_date_db, all_time_text, last_day_text, self_print
 from utils.db_functions.requset_functions import get_requests
 from utils.models.commands.command import Command
@@ -10,7 +11,7 @@ from utils.models.user import User
 
 class HistoryCommand(Command):
     """Command for get history of command"""
-    _message: str
+    _message: str = period
     _user: User
     _continue = True
     _menu = None
@@ -21,7 +22,7 @@ class HistoryCommand(Command):
     def execute(self, data):
         if isinstance(data, User):
             self._user = data
-            self._message = "Ввести период"
+            self._message = period
             self._menu = get_date_db()
         else:
             self._menu = None
@@ -32,14 +33,14 @@ class HistoryCommand(Command):
                 self._message = self._get_req_message(datetime.today() - timedelta(1))
                 self._continue = False
             elif data.lower() == self_print.lower():
-                self._message = "Введите дату начала в формате DD.MM.YYYY или DD/MM/YYYY"
+                self._message = input_start_date
                 self._manual = True
             else:
                 try:
                     date = parser.parse(data)
                     if self._start_date is None and self._finish_date is None and self._manual:
                         self._start_date = date
-                        self._message = "Введите дату окончания в формате DD.MM.YYYY или DD/MM/YYYY"
+                        self._message = input_finish_date
 
                     elif isinstance(self._start_date, datetime) and self._finish_date is None and self._manual:
                         self._finish_date = date
@@ -47,10 +48,10 @@ class HistoryCommand(Command):
                         self._continue = False
                 except:
                     if self._manual:
-                        self._message = "Неправильно введена дата попробуйте еще раз"
+                        self._message = incorrect_date
                     else:
                         self._continue = False
-                        self._message = "Такой кнопки нет"
+                        self._message = btn_dont_exist
 
     def _get_req_message(self, start=datetime.min, finish=datetime.today()):
         try:
@@ -62,9 +63,9 @@ class HistoryCommand(Command):
                     text += request.to_string() + "\n"
                 return text
             else:
-                return "Вы не делали запросы в этот промежуток времени"
+                return you_havent_follow
         except:
-            return "Произошла ошибка"
+            return error
 
     @Command.message.getter
     def message(self):
