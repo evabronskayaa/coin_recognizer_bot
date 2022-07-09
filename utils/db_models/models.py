@@ -13,6 +13,8 @@ class UserDbModel(BaseModel):
     id = IntegerField(unique=True, null=False, help_text="id that use in the Telegram", primary_key=True)
     start_date = DateTimeField(null=False, help_text="start date of using the bot")
     money_account = IntegerField(null=False)
+    is_manager = BooleanField(null=False)
+    is_admin = BooleanField(null=False)
 
     class Meta:
         order_by = 'start_date'
@@ -23,23 +25,11 @@ class Worker(BaseModel):
     user_id = ForeignKeyField(UserDbModel, unique=True, null=False)
 
 
-class ManagerDbModel(Worker):
-    token = CharField(null=False, primary_key=True)
-
-    class Meta:
-        db_table = 'Managers'
-
-
-class AdminDbModel(Worker):
-    class Meta:
-        db_table = 'Admins'
-
-
 class RequestDbModel(Worker):
     date = DateTimeField(null=False)
     message = CharField(null=True)
-    data = BigBitField(null=True)
-    id = IntegerField(unique=True, null=False, help_text="id of Request", primary_key=True)
+    rating = BooleanField(null=True)
+    id = CharField(unique=True, null=False, help_text="telegram id of Request", primary_key=True)
 
     class Meta:
         order_by = 'date'

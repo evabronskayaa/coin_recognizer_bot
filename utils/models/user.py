@@ -2,39 +2,39 @@ import datetime
 
 
 class User:
-    __name = ''
-    __id = 0
-    __start_date = datetime.date.today()
-    __money_account = 0
+    _name = ''
+    _id = 0
+    _start_date = datetime.date.today()
+    _money_account = 0
+    _is_manager = False
+    _is_admin = False
 
-    def __init__(self, name='', t_id=0, date=datetime.date.today(), money=0):
-        self.__name = name
-        self.__id = t_id
-        self.__start_date = date
-        self.__money_account = money
+    def __init__(self, name='', t_id=0, date=datetime.date.today(), money=0, manager=False, admin=False):
+        self._name = name
+        self._id = t_id
+        self._start_date = date
+        self._money_account = money
+        self._is_manager = manager
+        self._is_admin = admin
 
     def get_id(self):
-        return self.__id
+        return self._id
 
     def get_name(self):
-        return self.__name
+        return self._name
 
     def get_start_date(self):
-        return self.__start_date
+        return self._start_date
 
     def get_money(self):
-        return self.__money_account
+        return self._money_account
 
+    def is_manager(self):
+        return self._is_manager
 
-class Manager(User):
-    __token = ''
+    def is_admin(self):
+        return self._is_admin
 
-    def __init__(self, user, token):
-        super().__init__(user.get_name(), user.get_id(), user.get_start_date(), user.get_money())
-        self.__token = token
-
-
-class Admin(User):
-
-    def __init__(self, user):
-        super().__init__(user.get_name(), user.get_id(), user.get_start_date(), user.get_money())
+    def add_money(self, value):
+        if value is int:
+            self._money_account += value

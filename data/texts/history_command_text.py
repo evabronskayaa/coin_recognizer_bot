@@ -1,0 +1,7 @@
+period = "Ввыберите период"
+input_start_date = "Введите дату начала в формате DD.MM.YYYY или DD/MM/YYYY"
+input_finish_date = "Введите дату окончания в формате DD.MM.YYYY или DD/MM/YYYY"
+incorrect_date = "Неправильно введена дата попробуйте еще раз"
+btn_dont_exist = "Такой кнопки нет"
+you_havent_follow = "Вы не делали запросы в этот промежуток времени"
+error = "Произошла ошибка"

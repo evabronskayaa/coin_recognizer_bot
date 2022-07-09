@@ -1,22 +1,23 @@
 import logging
 import asyncio
-
-import utils.models.context
+from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from data.config import TOKEN
 from keyboards.inline.menu import *
-from utils.functions.authentication import authentication
-from utils.models.command import *
+from utils.functions.authentication import authentication_with_start
+from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
+from utils.models.context import Context
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
-context = utils.models.context.Context()
+
+context = Context()
 
 
 # handler оf /start command
@@ -24,96 +25,152 @@ context = utils.models.context.Context()
 async def send_welcome(message: types.Message):
     try:
         user = get_user_by_id(message.from_user.id)
-        if check_on_admin(user):
-            user = get_admin_by_user(user)
+        if user.is_admin():
             text = f'Привет, {user.get_name()}. Вы вошли в систему как администратор'
-        elif check_on_manager(user):
-            user = get_manager_by_user(user)
+        elif user.is_manager():
             text = f'Привет, {user.get_name()}. Вы вошли в систему как менеджер'
         else:
-            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
+            text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать деньги на фото'
 
     except Exception:
         t_id = message.from_user.id
-        name = message.from_user.first_name
+        name = message.from_user.username
         money = 100
         date = datetime.date.today()
         user = User(t_id=t_id, name=name, date=date, money=money)
         add_user(user)
-        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать монетки на фото'
-    context.add_user(user)
+        text = f'Привет, {user.get_name()}. Я бот, который умеет распозновать деньги на фото'
+    context.add_user(user, message.chat.id)
     await message.answer(text)
 
 
 # handler оf /help command
 @dp.message_handler(commands=['help'])
 async def send_help(message: types.Message):
-    user = authentication(context, message.from_user)
-    help_cmd = HelpCommand()
-    help_cmd.execute(user)
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    help_cmd = HelpCommand(message.chat.id)
+    await help_cmd.execute(user)
     await message.answer(text=help_cmd.message)
 
 
 # handler оf /menu command
 @dp.message_handler(commands=['menu'])
 async def send_type(message: types.Message):
-    await message.answer(f'Ну давай, выбирай', reply_markup=get_menu_kb())
+    await message.answer(f'Выберите пункт меню', reply_markup=get_menu_kb())
 
 
 # handler of /boost command
 @dp.message_handler(commands=['boost'])
 async def send_boost(message: types.Message):
-    user = authentication(context, message.from_user)
-    if isinstance(user, Admin):
-        command = BoostCommand()
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    if user.is_admin():
+        command = BoostCommand(message.chat.id)
         text = command.message
+        context.set_last_command(user, command)
     else:
-        text = NothingCommand().message
+        text = NothingCommand(message.chat.id).message
     await message.answer(text)
 
 
 # handler of /reduce command
 @dp.message_handler(commands=['reduce'])
 async def send_reduce(message: types.Message):
-    user = authentication(context, message.from_user)
-    if isinstance(user, Admin):
-        command = ReduceCommand()
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    if user.is_admin():
+        command = ReduceCommand(message.chat.id)
         text = command.message
+        context.set_last_command(user, command)
     else:
-        text = NothingCommand().message
+        text = NothingCommand(message.chat.id).message
     await message.answer(text)
 
 
 # handler of /stat command
 @dp.message_handler(commands=['stat'])
-async def send_reduce(message: types.Message):
-    user = authentication(context, message.from_user)
-    if isinstance(user, Admin) | isinstance(user, Manager):
-        command = StatCommand()
+async def send_stat(message: types.Message):
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    if user.is_manager() or user.is_admin():
+        command = StatCommand(bot, user, message.chat.id)
+        context.set_last_command(user, command)
+    else:
+        command = NothingCommand(message.chat.id)
+    text = command.message
+    if command.get_menu is None:
+        menu = get_none_kb()
+    else:
+        menu = command.get_menu
+    await message.answer(text, reply_markup=menu)
+
+
+# handler of /id command
+@dp.message_handler(commands=['credit'])
+async def send_id(message: types.Message):
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    if user.is_manager() or user.is_manager():
+        command = CreditCommand(message.chat.id)
+        context.set_last_command(user, command)
         text = command.message
     else:
-        text = NothingCommand().message
-    await message.answer(text, reply_markup=get_stat_kb())
+        command = NothingCommand(message.chat.id)
+        text = command.message
+    await message.answer(text)
+
+
+# handler of /id command
+@dp.message_handler(commands=['id'])
+async def send_id(message: types.Message):
+    await message.answer(f"ваш id: {message.from_user.id}")
 
 
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
-    await bot.send_photo(photo='https://risovach.ru/upload/2013/10/mem/a-huy-tebe_33321944_orig_.jpeg',
-                         chat_id=message.chat.id)
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    command = context.get_last_command(user)
+    if isinstance(command, MoneySearch):
+        await command.execute(message.photo[-1])
+        await message.answer(command.message)
+    else:
+        await bot.send_photo(
+            photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
+            chat_id=message.from_user.id)
 
 
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
-    text = message.text
-    if 'ты' in text.lower():
-        await message.reply("Да", reply_markup=get_none_kb())
-    else:
-        command = get_command(text)
-        user = authentication(context, message.from_user)
-        command.execute(user)
-        await message.reply(command.message, reply_markup=get_none_kb())
+
+    async def get_s_command():
+        s_command = get_command(message.text, bot, message.chat.id)
+        await s_command.execute(user)
+        if s_command.is_script:
+            context.set_last_command(user, s_command)
+        return s_command
+
+    menu = get_none_kb()
+    user = authentication_with_start(context, message.from_user, message.chat.id)
+    command = None
+    try:
+        command = context.get_last_command(user)
+        if not isinstance(command, NothingCommand):
+            await command.execute(message.text)
+            text = command.message
+            if not command.is_script:
+                context.set_last_command(user, NothingCommand(message.chat.id))
+            if command.get_menu is not None:
+                menu = command.get_menu
+        else:
+            command = await get_s_command()
+            text = command.message
+            if command.get_menu is not None:
+                menu = command.get_menu
+    except Exception as ex:
+        if command is None:
+            command = await get_s_command()
+            text = command.message
+        else:
+            text = ex
+    await message.reply(text, reply_markup=menu)
 
 
 async def scheduled(wait_for):
