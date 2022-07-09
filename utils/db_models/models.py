@@ -1,6 +1,6 @@
 from peewee import *
 
-db = SqliteDatabase("utils/db/database.db")
+db = SqliteDatabase("database.db")
 
 
 class BaseModel(Model):
@@ -23,18 +23,6 @@ class UserDbModel(BaseModel):
 
 class Worker(BaseModel):
     user_id = ForeignKeyField(UserDbModel, unique=True, null=False)
-
-
-class ManagerDbModel(Worker):
-    token = CharField(null=False, primary_key=True)
-
-    class Meta:
-        db_table = 'Managers'
-
-
-class AdminDbModel(Worker):
-    class Meta:
-        db_table = 'Admins'
 
 
 class RequestDbModel(Worker):
