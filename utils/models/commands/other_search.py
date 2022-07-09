@@ -13,7 +13,7 @@ class OtherSearch(Command):
 
     @Command.message.getter
     def message(self):
-        return f'ждем фотографию'
+        return f'Жду фотографию'
 
     @Command.key_word.getter
     def key_word(self):

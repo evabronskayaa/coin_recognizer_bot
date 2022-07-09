@@ -4,11 +4,11 @@ from utils.models.user import User
 
 class Script:
     _user: User
-    _last_coomand: Command
+    _last_command: Command
 
     def __init__(self, user, command):
         self._user = user
-        self._last_coomand = command
+        self._last_command = command
 
     def get_user(self):
         return self._user
@@ -20,10 +20,10 @@ class Script:
         return False
 
     def get_last_command(self):
-        return self._last_coomand
+        return self._last_command
 
     def set_last_command(self, command: Command):
         if command is not None:
-            self._last_coomand = command
+            self._last_command = command
             return True
         return False

@@ -19,7 +19,7 @@ class ReduceCommand(Command):
             elif result:
                 self._message = "Успешно"
             else:
-                self._message = "Данный пользователь не является Менеджером"
+                self._message = "Данный пользователь не является менеджером"
         except:
             self._message = "Это не id"
         self._continue = False

@@ -16,7 +16,7 @@ class Type(Enum):
 class StatCommand(Command):
     """Command for get statistics by manager"""
 
-    _message = "Выберите статистику которую хотите узнать"
+    _message = "Выберите статистику, которую хотите узнать"
     _type: Type = None
     _continue = True
     _menu = None
@@ -26,7 +26,7 @@ class StatCommand(Command):
 
     def execute(self, data):
         if self._type is None:
-            self._message = "Выбирите дату"
+            self._message = "Выберите дату"
             if data.lower() == 'по новым пользователям':
                 self._type = Type.USER
                 self._menu = get_date_db()
@@ -73,9 +73,9 @@ class StatCommand(Command):
         stat = self._get_stat(start, finish)
         if len(stat) == 0:
             if self._type == Type.USER:
-                self._message = "Новых пользователей за данных период нету"
+                self._message = "Новых пользователей за данных период нет"
             elif self._type == Type.REQUEST:
-                self._message = "Новых запросов за данных период нету"
+                self._message = "Новых запросов за данных период нет"
         else:
             self._message = "тут будет график"
 

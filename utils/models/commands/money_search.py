@@ -6,7 +6,7 @@ from utils.models.user import User
 
 class MoneySearch(Command):
     """Command for search money"""
-    _message = "отправляй фотографию"
+    _message = "Отправьте фотографию"
     _continue = True
     _user: User
 
