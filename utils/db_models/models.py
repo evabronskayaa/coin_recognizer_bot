@@ -22,14 +22,14 @@ class UserDbModel(BaseModel):
 
 
 class Worker(BaseModel):
-    user_id = ForeignKeyField(UserDbModel, unique=True, null=False)
+    user_id = ForeignKeyField(UserDbModel, unique=False, null=False)
 
 
 class RequestDbModel(Worker):
     date = DateTimeField(null=False)
     message = CharField(null=True)
     rating = BooleanField(null=True)
-    id = CharField(unique=True, null=False, help_text="telegram id of Request", primary_key=True)
+    id = CharField(null=False, help_text="telegram id of Request", primary_key=True)
     image = BlobField(null=False)
 
     class Meta:
