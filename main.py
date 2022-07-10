@@ -1,10 +1,13 @@
 import logging
 import asyncio
+import random
 from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+
+from assets.images.penguin import photos
 from data.config import TOKEN
 from keyboards.inline.menu import *
 from utils.functions.authentication import authentication_with_start
@@ -116,7 +119,16 @@ async def send_id(message: types.Message):
     await message.answer(text)
 
 
-# handler of /id command
+# handler of /penguin command
+@dp.message_handler(commands=['penguin'])
+async def send_id(message: types.Message):
+    index = random.randint(0, len(photos) - 1)
+    await bot.send_photo(
+        photo=photos[index],
+        chat_id=message.chat.id)
+
+
+# handler of /pengiu command
 @dp.message_handler(commands=['id'])
 async def send_id(message: types.Message):
     await message.answer(f"ваш id: {message.from_user.id}")
@@ -132,14 +144,13 @@ async def handle_docs_photo(message: types.Message):
         await message.answer(command.message)
     else:
         await bot.send_photo(
-            photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
+            photo=message.photo[-1],
             chat_id=message.from_user.id)
 
 
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
-
     async def get_s_command():
         s_command = get_command(message.text, bot, message.chat.id)
         await s_command.execute(user)
