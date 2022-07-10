@@ -149,8 +149,6 @@ async def send_id(message: types.Message):
 async def handle_docs_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user, message.chat.id)
     command = context.get_last_command(user)
-    for a in context.get_scripts():
-        print(a.get_user().get_id(),a.get_last_command())
     if isinstance(command, MoneySearch):
         file_info = await bot.get_file(message.photo[-1].file_id)
         path = "assets/images/" + file_info.file_path.split('photos/')[1]

@@ -28,7 +28,6 @@ def authentication(context, t_id, chat_id):
     """
     try:
         user = context.get_user_by_id(t_id)
-        money = get_user_money(user)
         user.set_money(get_user_money(user))
         return user
     except:
