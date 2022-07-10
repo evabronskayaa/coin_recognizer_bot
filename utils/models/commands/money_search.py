@@ -25,24 +25,22 @@ class MoneySearch(Command):
         if isinstance(data, User):
             self._user = data
         else:
-            self._continue = False
             try:
+                self._continue = False
                 path = data
-                money_img, m_message, ach_path = money_detector(path)
-                self._image = money_img.read()
-                money_img.close()
-                result = InputFile(money_img)
+                money_path, m_message, ach_path = money_detector(path)
+
                 await self._bot.send_photo(
-                    photo=result,
+                    photo=InputFile(money_path),
                     chat_id=self._chat_id)
+                self._image = open(money_path, "rb").read()
                 self._message = m_message
                 self._is_correct = True
             except:
-                self._message = "Объекты на фото не найдены"
+                self._message = "Обьект на фото не найден"
 
     def save(self, file_id):
         if self._image is not None and self._user is not None:
-            print(self._image)
             add_request(file_id, self._user, self._message, self._image)
 
     @Command.message.getter

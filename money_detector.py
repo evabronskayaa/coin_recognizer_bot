@@ -32,7 +32,7 @@ def money_detector(img):
         root_dir=save_dir.joinpath('crops'),  # root for archive - current working dir if None
         base_dir=None)  # start archiving from here - cwd if None too
 
-    return open(Path(save_dir, Path(img).name), 'rb'), calculate_the_amount(results), archive # Photo, amount, archive
+    return Path(save_dir, Path(img).name), calculate_the_amount(results), archive # Photo, amount, archive
 
 
 def increment_path(path, exist_ok=False, sep='', mkdir=False):
