@@ -1,4 +1,5 @@
-from aiogram.types import PhotoSize
+from aiogram import Bot
+from aiogram.types import PhotoSize, File
 
 from money_detector import money_detector
 from utils.models.commands.command import Command
@@ -10,16 +11,26 @@ class MoneySearch(Command):
     _message = "Отправьте фотографию"
     _continue = True
     _user: User
+    _bot: Bot
+
+    def __init__(self, chat_id, bot):
+        self._bot = bot
+        super().__init__(chat_id)
 
     async def execute(self, data):
         if isinstance(data, User):
             self._user = data
-        elif isinstance(data, PhotoSize):
-            self._continue = False
-            self._message = "В разработке"
         else:
-            raise Exception("incorrect data")
-        money_detector(data)
+            self._continue = False
+            try:
+                path = data
+                money_img, m_message, ach_path = money_detector(path)
+                await self._bot.send_photo(
+                    photo=money_img,
+                    chat_id=self._chat_id)
+                self._message = m_message
+            except:
+                self._message = "Объекты на фото не найдены"
 
     @Command.message.getter
     def message(self):

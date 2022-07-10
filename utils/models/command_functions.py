@@ -17,7 +17,7 @@ from utils.models.figure import figures
 def get_commands(bot, char_id) -> list[Command]:
     """Function for get all commands"""
     return [FollowCommand(bot, char_id), HistoryCommand(char_id), OtherSearch(char_id),
-            MoneySearch(char_id), CheckBalance(char_id), HelpCommand(char_id)] + \
+            MoneySearch(char_id, bot), CheckBalance(char_id), HelpCommand(char_id)] + \
            [ShapeSearch(figure, char_id) for figure in figures]
 
 
