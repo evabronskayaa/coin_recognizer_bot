@@ -34,3 +34,6 @@ class Request:
 
     def get_images_bytes(self):
         return self._data
+
+    def get_message(self):
+        return self._message

@@ -1,3 +1,5 @@
+from aiogram.types import InputFile
+
 from utils.db_functions.follow_functions import get_follows
 from utils.models.commands.command import Command
 from aiogram import Bot
@@ -22,7 +24,8 @@ class FollowCommand(Command):
                 self._message = "Держи"
                 for request in requests:
                     try:
-                        await self._bot.send_photo(chat_id=self._chat_id, photo=request.get_id())
+                        await self._bot.send_photo(chat_id=self._chat_id, photo=InputFile(request.get_id()))
+                        await self._bot.send_message(chat_id=self._chat_id, text=request.get_message())
                     except:
                         self._message = "хм"
             else:

@@ -1,5 +1,5 @@
 from utils.db_models.models import *
-from utils.models.request import Request
+from utils.models.follow import Follow
 from utils.models.user import User
 
 
@@ -10,10 +10,7 @@ def get_follows(user: User):
     :return None:
     """
     follows = FollowDbModel.select().where(FollowDbModel.user_id == user.get_id())
-    requests_db = [RequestDbModel.get(RequestDbModel.id == follow.request_id) for follow in follows]
-    return [Request(message=request.message, date=request.date, user=user, r_id=request.id, rating=request.rating,
-                    data=request.image)
-            for request in requests_db]
+    return [Follow(follow.request_id, user) for follow in follows]
 
 
 def add_follow(request, user):
@@ -23,4 +20,4 @@ def add_follow(request, user):
     :param user: User
     :return None:
     """
-    FollowDbModel.create(request_id=request.get_id(), user_id=user.get_id())
+    FollowDbModel.create(request_id=request, user_id=user.get_id())
