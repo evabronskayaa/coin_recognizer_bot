@@ -151,12 +151,15 @@ async def send_id(message: types.Message):
 async def send_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user, message.chat.id)
     command = context.get_last_command(user)
+    menu = get_none_kb()
     if isinstance(command, MoneySearch):
         file_info = await bot.get_file(message.photo[-1].file_id)
         path = "assets/images/" + file_info.file_path.split('photos/')[1]
         await message.photo[-1].download(path)
         await command.execute(path)
-        await message.answer(command.message)
+        if command.get_menu is not None:
+            menu = command.get_menu
+        await message.answer(command.message, reply_markup=menu)
         if command.is_correct():
             command.save(file_info.file_id)
         if not command.is_script:
@@ -166,7 +169,7 @@ async def send_photo(message: types.Message):
     else:
         await bot.send_photo(
             photo=message.photo[-1].file_id,
-            chat_id=message.chat.id)
+            chat_id=message.chat.id, reply_markup=menu)
 
 
 # handler of other's text
@@ -210,9 +213,12 @@ async def send_echo(message: types.Message):
 @dp.callback_query_handler(text="add_follow")
 async def send_like(call: types.CallbackQuery):
     image, user = await get_image(call, bot, context)
-    request = get_request(user, image)
-    add_follow(request.get_id(), user)
-    await call.message.reply("Добавлено в избранное")
+    try:
+        request = get_request(user, image)
+        add_follow(request.get_id(), user)
+        await call.message.reply("Добавлено в избранное")
+    except:
+        None
 
 
 # handler of callback like's functuon

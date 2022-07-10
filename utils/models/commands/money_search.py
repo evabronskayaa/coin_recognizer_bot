@@ -1,7 +1,7 @@
 from aiogram import Bot
 from aiogram.types import InputFile
 
-from keyboards.inline.menu import get_follow_inline_kb
+from keyboards.inline.menu import get_follow_inline_kb, get_arhiv_kb, yes, no
 from money_detector import money_detector
 from utils.db_functions.requset_functions import add_request
 from utils.db_functions.user_functions import update_user
@@ -18,6 +18,8 @@ class MoneySearch(Command):
     _menu = None
     _image = None
     _is_correct = False
+    _is_photo = True
+    _arhiv = None
 
     def __init__(self, chat_id, bot):
         self._bot = bot
@@ -29,9 +31,8 @@ class MoneySearch(Command):
             if data.get_money() <= 5 and not data.is_admin() and not data.is_manager():
                 self._continue = False
                 self._message = "У вас недостаточно средств"
-        else:
+        elif self._is_photo:
             try:
-                self._continue = False
                 path = data
                 money_path, m_message, ach_path = money_detector(path)
 
@@ -39,12 +40,31 @@ class MoneySearch(Command):
                     photo=InputFile(money_path),
                     chat_id=self._chat_id, reply_markup=get_follow_inline_kb())
                 self._image = open(money_path, "rb").read()
-                self._message = m_message
+                self._arhiv = ach_path
+                self._message = m_message + "\n\n" + "Желаете получить архив?"
                 self._is_correct = True
+                self._is_photo = False
                 self._user.take_money(5)
+                self._menu = get_arhiv_kb()
                 update_user(self._user)
             except:
                 self._message = "Объект на фото не найден"
+        else:
+            if self._is_correct and self._arhiv is not None:
+                if data.lower() == yes.lower():
+                    self._message = "вот, архив"
+                    arg = open(self._arhiv, "rb")
+                    await self._bot.send_document(document=arg, chat_id=self._chat_id)
+                    self._continue = False
+                    self._menu = None
+                elif data.lower() == no.lower():
+                    self._message = "как, скажите"
+                    self._continue = False
+                    self._menu = None
+                else:
+                    "Такой кнопки нет"
+            else:
+                raise Exception("incorrect data")
 
     def save(self, file_id):
         if self._image is not None and self._user is not None:

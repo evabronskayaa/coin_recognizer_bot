@@ -67,3 +67,14 @@ def get_remove_inline_kb():
     remove = types.InlineKeyboardButton(text="Удалить из избраного", callback_data="remove")
     keyboard.add(remove)
     return keyboard
+
+
+yes = "Да"
+no = "Нет"
+
+
+def get_arhiv_kb():
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    buttons = [yes, no]
+    keyboard.add(*buttons)
+    return keyboard
