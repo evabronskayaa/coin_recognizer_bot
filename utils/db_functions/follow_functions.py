@@ -12,7 +12,7 @@ def get_follows(user: User):
     follows = FollowDbModel.select().where(FollowDbModel.user_id == user.get_id())
     requests_db = [RequestDbModel.get(RequestDbModel.id == follow.request_id) for follow in follows]
     return [Request(message=request.message, date=request.date, user=user, r_id=request.id, rating=request.rating,
-                    data=request.image_data)
+                    data=request.image)
             for request in requests_db]
 
 

@@ -14,9 +14,10 @@ def get_requests(user: User, start_date=datetime.min, finish_date=datetime.today
     :return requests: list[Request]
     """
     requests_db = RequestDbModel.select()\
-        .where(finish_date >= RequestDbModel.date >= start_date & RequestDbModel.user_id == user.get_id())
+        .where((finish_date >= RequestDbModel.date >= start_date)
+               & (RequestDbModel.user_id == user.get_id()))
     return [Request(message=request.message, date=request.date, user=user, rating=request.rating, r_id=request.id,
-                    data=request.image_data)
+                    data=request.image)
             for request in requests_db]
 
 
@@ -30,6 +31,10 @@ def add_request(r_id, user: User, message, image_data, rating=None):
     :param user: User
     :return None:
     """
-    RequestDbModel.create(date=datetime.today(), message=message,
-                          id=r_id, user_id=user.get_id(), image=image_data)
+    if rating is None:
+        RequestDbModel.create(date=datetime.today(), message=message,
+                              id=r_id, user_id=user.get_id(), image=image_data)
+    else:
+        RequestDbModel.create(date=datetime.today(), message=message,
+                              id=r_id, user_id=user.get_id(), image=image_data, rating=rating)
 

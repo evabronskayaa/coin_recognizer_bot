@@ -60,7 +60,7 @@ class HistoryCommand(Command):
             if len(requests) > 0:
                 text = ""
                 for request in requests:
-                    text += request.to_string() + "\n"
+                    text += request.to_string() + "\n\r\n"
                 return text
             else:
                 return you_havent_follow
