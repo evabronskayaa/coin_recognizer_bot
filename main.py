@@ -10,7 +10,15 @@ from keyboards.inline.menu import *
 from utils.functions.authentication import authentication_with_start
 from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
+from utils.models.commands.boost_command import BoostCommand
+from utils.models.commands.credit_command import CreditCommand
+from utils.models.commands.help_command import HelpCommand
+from utils.models.commands.money_search import MoneySearch
+from utils.models.commands.nothing_command import NothingCommand
+from utils.models.commands.reduce_command import ReduceCommand
+from utils.models.commands.stat_command import StatCommand
 from utils.models.context import Context
+from utils.models.user import User
 
 logging.basicConfig(level=logging.INFO)
 
