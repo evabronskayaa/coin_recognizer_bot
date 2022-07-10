@@ -34,7 +34,11 @@ seaborn>=0.11.0
 # Extras --------------------------------------
 ipython  # interactive notebook
 psutil  # system utilization
-thop  # FLOPs computation
+thop>=0.1.0.post2207010342
 # albumentations>=1.0.3
 # pycocotools>=2.0  # COCO mAP
 # roboflow
+
+aiogram>=2.21
+python-dateutil>=2.8.2
+peewee>=3.15.0
