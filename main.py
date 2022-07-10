@@ -1,11 +1,14 @@
 import logging
 import asyncio
+import random
 import shutil
 from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
+
+from assets.penguin import photos
 from data.config import TOKEN
 from keyboards.inline.menu import *
 from money_detector import money_detector
@@ -130,6 +133,15 @@ async def send_id(message: types.Message):
 @dp.message_handler(commands=['id'])
 async def send_id(message: types.Message):
     await message.answer(f"ваш id: {message.from_user.id}")
+
+
+# handler of /penguin command
+@dp.message_handler(commands=['penguin'])
+async def send_id(message: types.Message):
+    index = random.randint(0, len(photos) - 1)
+    await bot.send_photo(
+        photo=photos[index],
+        chat_id=message.chat.id)
 
 
 # handler оf others command
