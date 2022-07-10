@@ -11,7 +11,8 @@ from utils.models.user import User
 
 class MoneySearch(Command):
     """Command for search money"""
-    _message = "Отправьте фотографию"
+    _message = "Для удовлетворительного результата нужна фотография в хорошем качестве, " \
+               "на контрастном для объектов фоне, желательно снимать близко к объектам"
     _continue = True
     _user: User = None
     _bot: Bot
@@ -51,6 +52,7 @@ class MoneySearch(Command):
                 update_user(self._user)
             except:
                 self._message = "Объект на фото не найден"
+                self._continue = False
         else:
             if self._is_correct and self._arhiv is not None:
                 if data.lower() == yes.lower():
@@ -65,6 +67,7 @@ class MoneySearch(Command):
                     self._menu = None
                 else:
                     "Такой кнопки нет"
+                    self._continue = False
             else:
                 raise Exception("incorrect data")
 

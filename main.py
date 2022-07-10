@@ -26,6 +26,7 @@ from utils.models.commands.reduce_command import ReduceCommand
 from utils.models.commands.stat_command import StatCommand
 from utils.models.context import Context
 from utils.models.user import User
+from utils.models.user_queue import UserQueue
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,6 +34,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
 context = Context()
+_user_queue = UserQueue()
 
 
 # handler оf /start command
@@ -153,10 +155,19 @@ async def send_photo(message: types.Message):
     command = context.get_last_command(user)
     menu = get_none_kb()
     if isinstance(command, MoneySearch):
+        if _user_queue.is_empty():
+            _user_queue.add_user(user)
+        else:
+            _user_queue.add_user(user)
+            pos = _user_queue.size()
+            for value in range(pos, 0, -1):
+                await asyncio.sleep(5)
+                await message.answer(f"Вы {pos} в очереди ожидайте")
         file_info = await bot.get_file(message.photo[-1].file_id)
         path = "assets/images/" + file_info.file_path.split('photos/')[1]
         await message.photo[-1].download(path)
         await command.execute(path)
+        _user_queue.pop_user()
         if command.get_menu is not None:
             menu = command.get_menu
         await message.answer(command.message, reply_markup=menu)
