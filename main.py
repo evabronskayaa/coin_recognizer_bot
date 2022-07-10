@@ -155,7 +155,9 @@ async def handle_docs_photo(message: types.Message):
         await message.photo[-1].download(path)
         await command.execute(path)
         await message.answer(command.message)
-        context.set_last_command(user, NothingCommand(message.chat.id))
+        if not command.is_script:
+            context.set_last_command(user, NothingCommand(message.chat.id))
+        command.save()
         shutil.rmtree("assets/images")
         shutil.rmtree("runs/detect")
     else:

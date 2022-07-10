@@ -21,7 +21,7 @@ def get_commands(bot, char_id) -> list[Command]:
            [ShapeSearch(figure, char_id) for figure in figures]
 
 
-def get_command(text, bot,chat_id):
+def get_command(text, bot, chat_id):
     """Get command for text"""
     for command in get_commands(bot, chat_id):
         if text.lower() == command.key_word.lower():

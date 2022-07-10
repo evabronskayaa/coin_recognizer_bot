@@ -1,7 +1,8 @@
 from aiogram import Bot
-from aiogram.types import PhotoSize, File
+from aiogram.types import PhotoSize, File, InputFile
 
 from money_detector import money_detector
+from utils.db_functions.requset_functions import add_request
 from utils.models.commands.command import Command
 from utils.models.user import User
 
@@ -12,6 +13,8 @@ class MoneySearch(Command):
     _continue = True
     _user: User
     _bot: Bot
+    _menu = None
+    _image = []
 
     def __init__(self, chat_id, bot):
         self._bot = bot
@@ -29,8 +32,12 @@ class MoneySearch(Command):
                     photo=money_img,
                     chat_id=self._chat_id)
                 self._message = m_message
+                self._image = money_img
             except:
                 self._message = "Объекты на фото не найдены"
+
+    def save(self, file_id):
+        add_request(file_id, self._user, self._message, self._image, False)
 
     @Command.message.getter
     def message(self):
@@ -46,4 +53,4 @@ class MoneySearch(Command):
 
     @Command.get_menu.getter
     def get_menu(self):
-        return None
+        return self._menu

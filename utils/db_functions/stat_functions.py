@@ -15,5 +15,6 @@ def get_new_user(start_date=datetime.min, finish_date=datetime.today()):
 def get_new_request(start_date=datetime.min, finish_date=datetime.today()):
     """get new request at intervals of time"""
     requests = RequestDbModel.select().where(start_date <= RequestDbModel.date <= finish_date)
-    return [Request(request.id, request.message, request.date, User(t_id=request.user_id), request.rating)
+    return [Request(request.id, request.message, request.date, User(t_id=request.user_id), request.rating,
+                    request.image_data)
             for request in requests]
