@@ -1,19 +1,29 @@
 import logging
 import asyncio
 import random
+import shutil
 from datetime import datetime
 
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 
-from assets.images.penguin import photos
+from assets.penguin import photos
 from data.config import TOKEN
 from keyboards.inline.menu import *
+from money_detector import money_detector
 from utils.functions.authentication import authentication_with_start
 from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
+from utils.models.commands.boost_command import BoostCommand
+from utils.models.commands.credit_command import CreditCommand
+from utils.models.commands.help_command import HelpCommand
+from utils.models.commands.money_search import MoneySearch
+from utils.models.commands.nothing_command import NothingCommand
+from utils.models.commands.reduce_command import ReduceCommand
+from utils.models.commands.stat_command import StatCommand
 from utils.models.context import Context
+from utils.models.user import User
 
 logging.basicConfig(level=logging.INFO)
 
@@ -119,6 +129,12 @@ async def send_id(message: types.Message):
     await message.answer(text)
 
 
+# handler of /id command
+@dp.message_handler(commands=['id'])
+async def send_id(message: types.Message):
+    await message.answer(f"ваш id: {message.from_user.id}")
+
+
 # handler of /penguin command
 @dp.message_handler(commands=['penguin'])
 async def send_id(message: types.Message):
@@ -128,29 +144,37 @@ async def send_id(message: types.Message):
         chat_id=message.chat.id)
 
 
-# handler of /pengiu command
-@dp.message_handler(commands=['id'])
-async def send_id(message: types.Message):
-    await message.answer(f"ваш id: {message.from_user.id}")
-
-
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
 async def handle_docs_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user, message.chat.id)
     command = context.get_last_command(user)
+    file_info = await bot.get_file(message.photo[-1].file_id)
+    path = "assets/images/" + file_info.file_path.split('photos/')[1]
+    await message.photo[-1].download(path)
+    try:
+        money, p, d = money_detector(path)
+        await bot.send_photo(
+            photo=money,
+            chat_id=message.from_user.id)
+        shutil.rmtree("assets/images")
+        shutil.rmtree("runs/detect")
+        shutil.rmtree("archive")
+    except:
+        await message.answer("Фото не разспознано")
     if isinstance(command, MoneySearch):
         await command.execute(message.photo[-1])
         await message.answer(command.message)
     else:
         await bot.send_photo(
-            photo=message.photo[-1],
+            photo="AgACAgIAAxkBAAIGI2LIg0wVWn_oZDqQ7M44Ez-vGxVWAAJ4vjEbtB5ISm0w5dY55N9GAQADAgADeAADKQQ",
             chat_id=message.from_user.id)
 
 
 # handler of other's text
 @dp.message_handler()
 async def send_echo(message: types.Message):
+
     async def get_s_command():
         s_command = get_command(message.text, bot, message.chat.id)
         await s_command.execute(user)

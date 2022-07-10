@@ -1,5 +1,6 @@
 from aiogram.types import PhotoSize
 
+from money_detector import money_detector
 from utils.models.commands.command import Command
 from utils.models.user import User
 
@@ -18,7 +19,7 @@ class MoneySearch(Command):
             self._message = "В разработке"
         else:
             raise Exception("incorrect data")
-        # TODO search money
+        money_detector(data)
 
     @Command.message.getter
     def message(self):
