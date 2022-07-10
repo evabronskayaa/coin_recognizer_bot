@@ -6,8 +6,8 @@ class ShapeSearch(Command):
     """Command for search shapes"""
     _continue = True
 
-    def __init__(self, figure):
-        super().__init__()
+    def __init__(self, figure, chat_id):
+        super().__init__(chat_id)
         self.__figure = figure
         self._continue = True
 
