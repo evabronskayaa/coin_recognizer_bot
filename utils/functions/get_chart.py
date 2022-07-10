@@ -1,4 +1,4 @@
-import datetime
+from datetime import timedelta
 
 import matplotlib.pyplot as plt
 from aiogram.types import InputFile
@@ -37,15 +37,27 @@ def _build_chart_user(users: list[User]):
 
 
 def _buils_chart_request(requests: list[Request]):
-    x_list = [request.get_date() for request in requests]
-    build_simple_chart(x_list, requests)
-    build_good_chart(x_list, requests)
+    width = 0.5
+    x_list = list(set([request.get_date() for request in requests]))
+    indexs = range(0, len(x_list))
+    simple = get_simple_chart(x_list, requests)
+    good = get_good_chart(x_list, requests)
+    bad = get_bad_chart(x_list, requests)
+    x_labels = ['{0.month}.{0.day}.{0.year}'.format(x) for x in x_list]
+
+    plt.xticks(indexs, x_labels)
+    plt.bar(indexs, simple, label="Новые запросы", width=width/2)
+    plt.legend()
+    plt.bar([value+width*0.65 for value in indexs], good, label="Положительные запросы", width=width/2)
+    plt.legend()
+    plt.bar([value+width*1.3 for value in indexs], bad, label="Негативные запросы", width=width/2)
+    plt.legend()
     plt.savefig("../../chart.png")
     plt.close()
     return InputFile("../../chart.png")
 
 
-def build_simple_chart(x_list, requests):
+def get_simple_chart(x_list, requests):
     y_list = []
     for x in x_list:
         count = 0
@@ -53,14 +65,10 @@ def build_simple_chart(x_list, requests):
             if request.get_date() == x:
                 count += 1
         y_list.append(count)
-    x_index = x_list
-    x_labels = ['{0.month}.{0.day}.{0.year}'.format(x) for x in x_list]
-    plt.xticks(x_index, x_labels)
-    plt.bar(x_list, y_list, label="Новые запросы")
-    plt.legend()
+    return y_list
 
 
-def build_good_chart(x_list, requests):
+def get_good_chart(x_list, requests):
     y_list = []
     for x in x_list:
         count = 0
@@ -69,13 +77,10 @@ def build_good_chart(x_list, requests):
             if request.get_date() == x and rating is not None and rating is True:
                 count += 1
         y_list.append(count)
-    x_index = x_list
-    x_labels = ['{0.month}.{0.day}.{0.year}'.format(x) for x in x_list]
-    plt.xticks(x_index, x_labels)
-    plt.bar(x_list, y_list, label="Положительные запросы")
+    return y_list
 
 
-def build_bad_chart(x_list, requests):
+def get_bad_chart(x_list, requests):
     y_list = []
     for x in x_list:
         count = 0
@@ -84,7 +89,4 @@ def build_bad_chart(x_list, requests):
             if request.get_date() == x and rating is not None and rating is False:
                 count += 1
         y_list.append(count)
-    x_index = x_list
-    x_labels = ['{0.month}.{0.day}.{0.year}'.format(x) for x in x_list]
-    plt.xticks(x_index, x_labels)
-    plt.bar(x_list, y_list, label="Негативные запросы")
+    return y_list
