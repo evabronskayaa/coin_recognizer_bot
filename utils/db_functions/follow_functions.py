@@ -30,3 +30,9 @@ def add_follow(request, user):
     :return None:
     """
     FollowDbModel.create(request_id=request, user_id=user.get_id())
+
+
+def remove_follow(request_id):
+    arr = FollowDbModel.select().where(FollowDbModel.request_id == request_id)
+    for val in arr:
+        val.delete_instance()

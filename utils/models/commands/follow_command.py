@@ -1,10 +1,10 @@
 from aiogram.types import InputFile
 
+from keyboards.inline.menu import get_remove_inline_kb
 from utils.db_functions.follow_functions import get_follows
 from utils.models.commands.command import Command
 from aiogram import Bot
 import io
-import PIL.Image as Image
 
 from utils.models.user import User
 
@@ -26,9 +26,9 @@ class FollowCommand(Command):
                 self._message = "Держи"
                 for request in requests:
                     try:
-                        image = Image.open(io.BytesIO(request.get_images_bytes()))
-                        image.save("/photo.png")
-                        await self._bot.send_photo(chat_id=self._chat_id, photo=InputFile("/photo.png"))
+                        image = InputFile(io.BytesIO(request.get_images_bytes()))
+                        await self._bot.send_photo(chat_id=self._chat_id, photo=image,
+                                                   reply_markup=get_remove_inline_kb())
                         await self._bot.send_message(chat_id=self._chat_id, text=request.get_message())
                     except:
                         self._message = "хм"

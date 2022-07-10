@@ -13,8 +13,8 @@ def get_request(user: User, image):
     :return request: Request
     """
     requests_db = RequestDbModel.select()\
-        .where((RequestDbModel.image == image)
-               & (RequestDbModel.user_id == user.get_id()))
+        .where(RequestDbModel.image == image)
+    print(requests_db)
     for request in requests_db:
         return Request(message=request.message, date=request.date, user=user,
                        rating=request.rating, r_id=request.id, data=request.image)
@@ -65,4 +65,3 @@ def change_request(image, user, rating):
         request.save()
         val = True
     return val
-

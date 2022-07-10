@@ -1,4 +1,5 @@
 from utils.models.commands.command import Command
+from utils.models.request import Request
 from utils.models.user import User
 
 
@@ -27,3 +28,4 @@ class Script:
             self._last_command = command
             return True
         return False
+

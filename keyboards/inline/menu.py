@@ -60,3 +60,10 @@ def get_follow_inline_kb():
     keyboard.row(like, dislike)
     keyboard.add(follow_btn)
     return keyboard
+
+
+def get_remove_inline_kb():
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    remove = types.InlineKeyboardButton(text="Удалить из избраного", callback_data="remove")
+    keyboard.add(remove)
+    return keyboard
