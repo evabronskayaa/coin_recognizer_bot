@@ -186,3 +186,5 @@ fabric.properties
 data/secret.py
 
 .idea/
+
+utils/db/database.db
