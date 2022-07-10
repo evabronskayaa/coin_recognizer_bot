@@ -257,3 +257,5 @@ crashlytics-build.properties
 fabric.properties
 
 .idea/
+
+utils/db/database.db

@@ -1,5 +1,5 @@
 from aiogram import Bot
-from aiogram.types import PhotoSize, File, InputFile
+from aiogram.types import InputFile
 
 from money_detector import money_detector
 from utils.db_functions.requset_functions import add_request
@@ -11,10 +11,11 @@ class MoneySearch(Command):
     """Command for search money"""
     _message = "Отправьте фотографию"
     _continue = True
-    _user: User
+    _user: User = None
     _bot: Bot
     _menu = None
-    _image = []
+    _image = None
+    _is_correct = False
 
     def __init__(self, chat_id, bot):
         self._bot = bot
@@ -28,16 +29,21 @@ class MoneySearch(Command):
             try:
                 path = data
                 money_img, m_message, ach_path = money_detector(path)
+                self._image = money_img.read()
+                money_img.close()
+                result = InputFile(money_img)
                 await self._bot.send_photo(
-                    photo=money_img,
+                    photo=result,
                     chat_id=self._chat_id)
                 self._message = m_message
-                self._image = money_img
+                self._is_correct = True
             except:
                 self._message = "Объекты на фото не найдены"
 
     def save(self, file_id):
-        add_request(file_id, self._user, self._message, self._image, False)
+        if self._image is not None and self._user is not None:
+            print(self._image)
+            add_request(file_id, self._user, self._message, self._image)
 
     @Command.message.getter
     def message(self):
@@ -54,3 +60,6 @@ class MoneySearch(Command):
     @Command.get_menu.getter
     def get_menu(self):
         return self._menu
+
+    def is_correct(self):
+        return self._is_correct

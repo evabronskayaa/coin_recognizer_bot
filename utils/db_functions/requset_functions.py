@@ -20,7 +20,7 @@ def get_requests(user: User, start_date=datetime.min, finish_date=datetime.today
             for request in requests_db]
 
 
-def add_request(r_id, user: User, message, image_data, rating):
+def add_request(r_id, user: User, message, image_data, rating=None):
     """
     Function for add request in database
     :param image_data:
@@ -30,9 +30,6 @@ def add_request(r_id, user: User, message, image_data, rating):
     :param user: User
     :return None:
     """
-    try:
-        RequestDbModel.create(date=datetime.date.today(), message=message,
-                              id=r_id, user_id=user.get_id(), rating=rating, image_data=image_data)
-        return True
-    except:
-        return False
+    RequestDbModel.create(date=datetime.today(), message=message,
+                          id=r_id, user_id=user.get_id(), image=image_data)
+
