@@ -30,7 +30,7 @@ class RequestDbModel(Worker):
     message = CharField(null=True)
     rating = BooleanField(null=True)
     id = CharField(unique=True, null=False, help_text="telegram id of Request", primary_key=True)
-    image_data = BlobField(null=False)
+    image = BlobField(null=False)
 
     class Meta:
         order_by = 'date'
