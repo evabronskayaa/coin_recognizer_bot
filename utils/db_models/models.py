@@ -38,7 +38,7 @@ class RequestDbModel(Worker):
 
 
 class FollowDbModel(Worker):
-    request_id = ForeignKeyField(RequestDbModel, unique=True, null=False, primary_key=True)
+    request_id = ForeignKeyField(RequestDbModel, primary_key=True)
 
     class Meta:
         db_table = 'Follows'

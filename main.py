@@ -210,9 +210,8 @@ async def send_echo(message: types.Message):
 @dp.callback_query_handler(text="add_follow")
 async def send_like(call: types.CallbackQuery):
     image, user = await get_image(call, bot, context)
-    file_id = call.message.photo[-1].file_id
     request = get_request(user, image)
-    add_follow(file_id, user)
+    add_follow(request.get_id(), user)
     await call.message.reply("Добавлено в избранное")
 
 
