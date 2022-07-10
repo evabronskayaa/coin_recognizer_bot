@@ -1,11 +1,11 @@
-from datetime import datetime
+import datetime
 
 from utils.db_models.models import *
 from utils.models.request import Request
 from utils.models.user import User
 
 
-def get_requests(user: User, start_date=datetime.min, finish_date=datetime.today()):
+def get_requests(user: User, start_date=datetime.MINYEAR, finish_date=datetime.date.today()):
     """
     Function for get all request of user
     :param finish_date: datetime, optional parameter
@@ -21,9 +21,10 @@ def get_requests(user: User, start_date=datetime.min, finish_date=datetime.today
             for request in requests_db]
 
 
-def add_request(r_id, user: User, message, image_data, rating=None):
+def add_request(r_id, user: User, message, image_data, date=datetime.date.today(), rating=None):
     """
     Function for add request in database
+    :param date:
     :param image_data:
     :param rating: photo's rating
     :param r_id: telegram id of photo
@@ -32,9 +33,9 @@ def add_request(r_id, user: User, message, image_data, rating=None):
     :return None:
     """
     if rating is None:
-        RequestDbModel.create(date=datetime.today(), message=message,
+        RequestDbModel.create(date=date, message=message,
                               id=r_id, user_id=user.get_id(), image=image_data)
     else:
-        RequestDbModel.create(date=datetime.today(), message=message,
+        RequestDbModel.create(date=date, message=message,
                               id=r_id, user_id=user.get_id(), image=image_data, rating=rating)
 
