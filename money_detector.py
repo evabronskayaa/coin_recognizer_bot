@@ -5,7 +5,7 @@ from shutil import make_archive
 
 def money_detector(img):
     repo_or_dir = ''
-    model_path = Path('..', 'yolov5s_41_640p_mAP5_85.pt')
+    model_path = Path('yolov5s_41_640p_mAP5_85.pt')
     save_dir = Path('runs', 'detect', 'exp')
 
     # Model
@@ -32,7 +32,8 @@ def money_detector(img):
         root_dir=save_dir.joinpath('crops'),  # root for archive - current working dir if None
         base_dir=None)  # start archiving from here - cwd if None too
 
-    return open(Path(save_dir, img), 'rb'), calculate_the_amount(results), archive # Photo, amount, archive
+    return open(Path(save_dir, Path(img).name), 'rb'), calculate_the_amount(results), archive # Photo, amount, archive
+
 
 def increment_path(path, exist_ok=False, sep='', mkdir=False):
     # Increment file or directory path, i.e. runs/exp --> runs/exp{sep}2, runs/exp{sep}3, ... etc.
