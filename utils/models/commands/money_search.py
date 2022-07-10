@@ -18,6 +18,7 @@ class MoneySearch(Command):
     _menu = None
     _image = None
     _is_correct = False
+    _m_message = ""
     _is_photo = True
     _arhiv = None
 
@@ -41,6 +42,7 @@ class MoneySearch(Command):
                     chat_id=self._chat_id, reply_markup=get_follow_inline_kb())
                 self._image = open(money_path, "rb").read()
                 self._arhiv = ach_path
+                self._m_message = m_message
                 self._message = m_message + "\n\n" + "Желаете получить архив?"
                 self._is_correct = True
                 self._is_photo = False
@@ -68,7 +70,7 @@ class MoneySearch(Command):
 
     def save(self, file_id):
         if self._image is not None and self._user is not None:
-            add_request(file_id, self._user, self._message, self._image)
+            add_request(file_id, self._user, self._m_message, self._image)
 
     @Command.message.getter
     def message(self):
