@@ -104,3 +104,12 @@ def remove_manager_by_name(name):
             return False
     except:
         return None
+
+
+def update_user(user: User):
+    UserDbModel(id=user.get_id(), name=user.get_name(), start_date=user.get_start_date(),
+                money_account=user.get_money(), is_manager=user.is_manager(), is_admin=user.is_admin()).save()
+
+
+def get_user_money(user: User):
+    return get_user_by_id(user.get_id()).get_money()

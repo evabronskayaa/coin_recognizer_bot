@@ -39,3 +39,6 @@ class Context:
             return True
         except:
             return False
+
+    def get_scripts(self):
+        return self._scripts

@@ -27,7 +27,10 @@ def authentication(context, t_id, chat_id):
     :return user: User | Admin
     """
     try:
-        return context.get_user_by_id(t_id)
+        user = context.get_user_by_id(t_id)
+        money = get_user_money(user)
+        user.set_money(get_user_money(user))
+        return user
     except:
         user = get_user_by_id(t_id)
         context.add_user(user, chat_id)

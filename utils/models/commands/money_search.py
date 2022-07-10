@@ -3,6 +3,7 @@ from aiogram.types import InputFile
 
 from money_detector import money_detector
 from utils.db_functions.requset_functions import add_request
+from utils.db_functions.user_functions import update_user
 from utils.models.commands.command import Command
 from utils.models.user import User
 
@@ -24,6 +25,9 @@ class MoneySearch(Command):
     async def execute(self, data):
         if isinstance(data, User):
             self._user = data
+            if data.get_money() <= 5 and not data.is_admin() and not data.is_manager():
+                self._continue = False
+                self._message = "У вас недостаточно средств"
         else:
             try:
                 self._continue = False
@@ -36,6 +40,9 @@ class MoneySearch(Command):
                 self._image = open(money_path, "rb").read()
                 self._message = m_message
                 self._is_correct = True
+                self._user.take_money(5)
+                print(self._user.get_money())
+                update_user(self._user)
             except:
                 self._message = "Обьект на фото не найден"
 

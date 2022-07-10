@@ -1,5 +1,5 @@
 from data.texts.credit_command_text import *
-from utils.db_functions.user_functions import get_user_by_id, get_user_by_name
+from utils.db_functions.user_functions import get_user_by_id, get_user_by_name, update_user
 from utils.models.commands.command import Command
 
 
@@ -21,6 +21,7 @@ class CreditCommand(Command):
                     self._continue = False
                 else:
                     self._user.add_money(t_id)
+                    update_user(self._user)
                     self._message = successfully
                     self._continue = False
         except:

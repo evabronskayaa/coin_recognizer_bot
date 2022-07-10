@@ -36,5 +36,12 @@ class User:
         return self._is_admin
 
     def add_money(self, value):
-        if value is int:
+        if value > 0:
             self._money_account += value
+
+    def take_money(self, value):
+        if value > 0:
+            self._money_account -= value
+
+    def set_money(self, value):
+        self._money_account = value
