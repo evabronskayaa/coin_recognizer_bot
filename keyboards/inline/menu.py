@@ -50,3 +50,13 @@ def get_balance_kb():
     buttons = [top_up]
     keyboard.add(*buttons)
     return keyboard
+
+
+def get_follow_inline_kb():
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    like = types.InlineKeyboardButton(text="👍🏻", callback_data="like")
+    dislike = types.InlineKeyboardButton(text="👎🏻", callback_data="dislike")
+    follow_btn = types.InlineKeyboardButton(text="Добавить в избранное", callback_data="add_follow")
+    keyboard.row(like, dislike)
+    keyboard.add(follow_btn)
+    return keyboard

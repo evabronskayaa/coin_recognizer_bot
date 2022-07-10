@@ -1,6 +1,7 @@
 from aiogram import Bot
 from aiogram.types import InputFile
 
+from keyboards.inline.menu import get_follow_inline_kb
 from money_detector import money_detector
 from utils.db_functions.requset_functions import add_request
 from utils.db_functions.user_functions import update_user
@@ -36,15 +37,14 @@ class MoneySearch(Command):
 
                 await self._bot.send_photo(
                     photo=InputFile(money_path),
-                    chat_id=self._chat_id)
+                    chat_id=self._chat_id, reply_markup=get_follow_inline_kb())
                 self._image = open(money_path, "rb").read()
                 self._message = m_message
                 self._is_correct = True
                 self._user.take_money(5)
-                print(self._user.get_money())
                 update_user(self._user)
             except:
-                self._message = "Обьект на фото не найден"
+                self._message = "Объект на фото не найден"
 
     def save(self, file_id):
         if self._image is not None and self._user is not None:

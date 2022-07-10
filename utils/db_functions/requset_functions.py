@@ -5,6 +5,22 @@ from utils.models.request import Request
 from utils.models.user import User
 
 
+def get_request(user: User, image):
+    """
+    Function for get all request of user
+    :param image: array bytes of image
+    :param user: User
+    :return request: Request
+    """
+    requests_db = RequestDbModel.select()\
+        .where((RequestDbModel.image == image)
+               & (RequestDbModel.user_id == user.get_id()))
+    for request in requests_db:
+        return Request(message=request.message, date=request.date, user=user,
+                       rating=request.rating, r_id=request.id, data=request.image)
+    raise Exception("haven't request")
+
+
 def get_requests(user: User, start_date=datetime.MINYEAR, finish_date=datetime.date.today()):
     """
     Function for get all request of user
@@ -38,4 +54,15 @@ def add_request(r_id, user: User, message, image_data, date=datetime.date.today(
     else:
         RequestDbModel.create(date=date, message=message,
                               id=r_id, user_id=user.get_id(), image=image_data, rating=rating)
+
+
+def change_request(image, user, rating):
+    val = False
+    requests = RequestDbModel.select()\
+        .where((RequestDbModel.image == image) & (RequestDbModel.user_id == user.get_id()))
+    for request in requests:
+        request.rating = rating
+        request.save()
+        val = True
+    return val
 

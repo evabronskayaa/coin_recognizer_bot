@@ -11,8 +11,10 @@ from aiogram.utils import executor
 from assets.penguin import photos
 from data.config import TOKEN
 from keyboards.inline.menu import *
-from money_detector import money_detector
+from utils.db_functions.follow_functions import add_follow
+from utils.db_functions.requset_functions import get_request
 from utils.functions.authentication import authentication_with_start
+from utils.functions.image_functions import change_value, get_image
 from utils.models.command_functions import *
 from utils.db_functions.user_functions import *
 from utils.models.commands.boost_command import BoostCommand
@@ -146,7 +148,7 @@ async def send_id(message: types.Message):
 
 # handler оf others command
 @dp.message_handler(content_types=['photo'])
-async def handle_docs_photo(message: types.Message):
+async def send_photo(message: types.Message):
     user = authentication_with_start(context, message.from_user, message.chat.id)
     command = context.get_last_command(user)
     if isinstance(command, MoneySearch):
@@ -202,6 +204,27 @@ async def send_echo(message: types.Message):
         else:
             text = ex
     await message.reply(text, reply_markup=menu)
+
+
+# handler of callback like's functuon
+@dp.callback_query_handler(text="add_follow")
+async def send_like(call: types.CallbackQuery):
+    image, user = await get_image(call, bot, context)
+    request = get_request(user, image)
+    add_follow(request, user)
+    await call.message.reply("Добавлено в избранное")
+
+
+# handler of callback like's functuon
+@dp.callback_query_handler(text="like")
+async def send_like(call: types.CallbackQuery):
+    await change_value(call, True, "Я рад, что вам понравилось", bot, context)
+
+
+# handler of callback dislike's functuon
+@dp.callback_query_handler(text="dislike")
+async def send_dislike(call: types.CallbackQuery):
+    await change_value(call, False, "Я рад, что вам понравилось", bot, context)
 
 
 async def scheduled(wait_for):
