@@ -161,7 +161,8 @@ async def send_photo(message: types.Message):
             _user_queue.add_user(user)
             pos = _user_queue.size()
             for value in range(pos, 0, -1):
-                await asyncio.sleep(5)
+
+                await asyncio.sleep(random.randint(3,5))
                 await message.answer(f"Вы {pos} в очереди ожидайте")
         file_info = await bot.get_file(message.photo[-1].file_id)
         path = "assets/images/" + file_info.file_path.split('photos/')[1]
