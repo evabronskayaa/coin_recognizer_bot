@@ -5,7 +5,7 @@ from shutil import make_archive
 
 def money_detector(img):
     repo_or_dir = ''
-    model_path = Path('yolov5s_41_640p_mAP5_85.pt')
+    model_path = Path('yolov5s_150_640p_mAP5_95,6.pt')
     save_dir = Path('runs', 'detect', 'exp')
 
     # Model
