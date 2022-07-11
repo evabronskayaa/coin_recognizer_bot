@@ -67,10 +67,12 @@ class StatCommand(Command):
                     else:
                         if data.lower() == all_time_text.lower():
                             self._continue = False
+                            self._menu = None
                             await self._execute_stat()
                         elif data.lower() == last_day_text.lower():
                             start = datetime.today() - timedelta(1)
                             self._continue = False
+                            self._menu = None
                             await self._execute_stat(start)
                         else:
                             self._message = btn_dont_exist
