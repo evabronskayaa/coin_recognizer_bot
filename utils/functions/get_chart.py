@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 from aiogram.types import InputFile
 
 from utils.models.Type import Type
@@ -29,7 +30,8 @@ def _build_chart_user(users: list[User]):
     x_index = x_list
     x_labels = ['{0.month}.{0.day}.{0.year}'.format(x) for x in x_list]
     plt.xticks(x_index, x_labels)
-    plt.bar(x_list, y_list, label="Новые пользователи")
+    sns.set_theme(style="darkgrid")
+    sns.barplot(x=x_list, y=y_list, label="Новые пользователи")
     plt.legend()
     plt.savefig("../../chart.png", dpi=100)
     plt.close()
