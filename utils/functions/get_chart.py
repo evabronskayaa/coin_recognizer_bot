@@ -48,13 +48,18 @@ def _buils_chart_request(requests: list[Request]):
     x_labels = ['{0.day}.{0.month}.{0.year}'.format(x) for x in x_list]
 
     plt.xticks(indexs, x_labels)
+    sns.set_theme(style="darkgrid")
+    # sns.barplot(x=indexs, y=simple, label="Новые пользователи", errwidth=width/2)
     plt.bar(indexs, simple, label="Новые запросы", width=width/2)
     plt.legend()
+    # sns.barplot(x=[value+width*0.65 for value in indexs], y=good, label="Новые пользователи", capsize=width/2)
     plt.bar([value+width*0.65 for value in indexs], good, label="Положительные запросы", width=width/2)
+
     plt.legend()
+    # sns.barplot(x=[value+width*1.3 for value in indexs], y=bad, label="Новые пользователи", capsize=width/2)
     plt.bar([value+width*1.3 for value in indexs], bad, label="Негативные запросы", width=width/2)
     plt.legend()
-    plt.savefig("../../chart.png")
+    plt.savefig("../../chart.png", dpi=100)
     plt.close()
     return InputFile("../../chart.png")
 
