@@ -19,11 +19,11 @@ class ShapeSearch(Command):
 
     @Command.message.getter
     def message(self):
-        return f'ждем фотографию с {self.__figure.name}ами'
+        return f'Ждем фотографию с {self.__figure.name}ами'
 
     @Command.key_word.getter
     def key_word(self):
-        return f"распознать на фото {self.__figure.name.lower()}и"
+        return f"Распознать на фото {self.__figure.name.lower()}и"
 
     @Command.is_script.getter
     def is_script(self) -> bool:

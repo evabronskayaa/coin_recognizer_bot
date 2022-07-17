@@ -17,7 +17,7 @@ class OtherSearch(Command):
 
     @Command.key_word.getter
     def key_word(self):
-        return "распознать по слову"
+        return "Распознать по слову"
 
     @Command.is_script.getter
     def is_script(self) -> bool:

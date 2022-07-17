@@ -32,7 +32,7 @@ class MoneySearch(Command):
             self._user = data
             if data.get_money() <= 5 and not data.is_admin() and not data.is_manager():
                 self._continue = False
-                self._message = "У вас недостаточно средств"
+                self._message = "У Вас недостаточно средств"
         elif self._is_photo:
             try:
                 path = data
@@ -56,13 +56,13 @@ class MoneySearch(Command):
         else:
             if self._is_correct and self._arhiv is not None:
                 if data.lower() == yes.lower():
-                    self._message = "вот, архив"
+                    self._message = "Держите архив"
                     arg = open(self._arhiv, "rb")
                     await self._bot.send_document(document=arg, chat_id=self._chat_id)
                     self._continue = False
                     self._menu = None
                 elif data.lower() == no.lower():
-                    self._message = "как, скажите"
+                    self._message = "Как скажите"
                     self._continue = False
                     self._menu = None
                 else:

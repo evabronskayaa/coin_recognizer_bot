@@ -33,7 +33,7 @@ class FollowCommand(Command):
                     except:
                         self._message = "хм"
             else:
-                self._message = "У вас нет избраного"
+                self._message = "У вас нет избранного"
         else:
             self._message = "Что-то пошло не так"
 
