@@ -7,9 +7,9 @@ Telegram-bot "Марат" is designed to count the number of coins and banknotes
 You can simply send a photo of money, and then the bot will give you a response in text form, which indicates the number of 
 objects and their sum!
 
-## Appearance
+## Appearance:
 ![image1](readme-pics/1.jpg)
 ![image2](readme-pics/2.jpg)
 
-## Run
+## Run:
 Available here: https://t.me/money_recognizer_bot
