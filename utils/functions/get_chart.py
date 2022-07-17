@@ -47,6 +47,7 @@ def _buils_chart_request(requests: list[Request]):
     bad = get_bad_chart(x_list, requests)
     x_labels = ['{0.day}.{0.month}.{0.year}'.format(x) for x in x_list]
 
+    sns.set_theme(style="darkgrid")
     plt.xticks(indexs, x_labels)
     plt.bar(indexs, simple, label="Новые запросы", width=width/2)
     plt.legend()
