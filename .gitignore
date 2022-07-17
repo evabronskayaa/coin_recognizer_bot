@@ -27,10 +27,9 @@ data/images/*
 !data/*.yaml
 !data/hyps
 !data/scripts
-!data/images
-!data/images/zidane.jpg
-!data/images/bus.jpg
+!data/texts
 !data/*.sh
+!data/config.py
 
 results*.csv
 
@@ -46,7 +45,7 @@ VOC/
 
 # Neural Network weights -----------------------------------------------------------------------------------------------
 *.weights
-*.pt
+#*.pt
 *.pb
 *.onnx
 *.engine
