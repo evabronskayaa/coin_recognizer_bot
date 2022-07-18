@@ -2,7 +2,7 @@
 ![python](https://img.shields.io/github/languages/top/evabronskayaa/coin_recognizer_bot)
 
 ## This app allows you:
-Telegram-bot "Марат" is designed to count the number of coins and cash and their amounts*.
+Telegram-bot "Марат" is designed to count the number of coins and cash and their amounts.*
 
 You can simply send a photo of money, and then the bot will give you a response in text form, which indicates the number of 
 objects and their sum!
